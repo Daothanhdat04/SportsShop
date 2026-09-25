@@ -1,0 +1,167 @@
+﻿@model IEnumerable<SportsShop.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/AdminOrders.css" />
+
+<!-- Page Header -->
+<div class="orders-page-header">
+    <h2><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</h2>
+</div>
+
+<!-- Search & Filter -->
+<div class="card search-filter-card">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm theo mã ĐH, tên khách, email, SĐT..." />
+                </div>
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">-- Tất cả trạng thái --</option>
+                        <option value="Đang xử lý" selected="@(ViewBag.Status == "Đang xử lý")">Đang xử lý</option>
+                        <option value="Đã xác nhận" selected="@(ViewBag.Status == "Đã xác nhận")">Đã xác nhận</option>
+                        <option value="Đang giao hàng" selected="@(ViewBag.Status == "Đang giao hàng")">Đang giao hàng</option>
+                        <option value="Đã giao" selected="@(ViewBag.Status == "Đã giao")">Đã giao</option>
+                        <option value="Đã hủy" selected="@(ViewBag.Status == "Đã hủy")">Đã hủy</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Từ ngày:</label>
+                    <input type="date" name="fromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-5">
+                    <label>Đến ngày:</label>
+                    <input type="date" name="toDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        <i class="fas fa-redo"></i> Reset
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="row stats-cards-row">
+    <div class="col-md-3">
+        <div class="card stats-card border-left-warning">
+            <div class="card-body">
+                <h6 class="text-warning">Đang xử lý</h6>
+                <h4>@Model.Count(o => o.Status == "Đang xử lý")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card border-left-info">
+            <div class="card-body">
+                <h6 class="text-info">Đã xác nhận</h6>
+                <h4>@Model.Count(o => o.Status == "Đã xác nhận")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card border-left-success">
+            <div class="card-body">
+                <h6 class="text-success">Đã giao</h6>
+                <h4>@Model.Count(o => o.Status == "Đã giao")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card border-left-primary">
+            <div class="card-body">
+                <h6 class="text-primary">Tổng doanh thu</h6>
+                <h4>@Model.Where(o => o.Status != "Đã hủy").Sum(o => o.TotalAmount).ToString("N0") ₫</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="card orders-table-card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table orders-table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã ĐH</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Số lượng SP</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td><strong>#@order.Id</strong></td>
+                            <td>
+                                <strong>@order.CustomerName</strong><br />
+                                <small>@order.CustomerPhone</small><br />
+                                <small class="text-muted">@order.CustomerEmail</small>
+                            </td>
+                            <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@order.OrderDetails.Sum(od => od.Quantity)</td>
+                            <td><strong>@order.TotalAmount.ToString("N0") ₫</strong></td>
+                            <td>
+                                @if (order.Status == "Đang xử lý")
+                                {
+                                    <span class="badge bg-warning">@order.Status</span>
+                                }
+                                else if (order.Status == "Đã xác nhận")
+                                {
+                                    <span class="badge bg-info">@order.Status</span>
+                                }
+                                else if (order.Status == "Đang giao hàng")
+                                {
+                                    <span class="badge bg-primary">@order.Status</span>
+                                }
+                                else if (order.Status == "Đã giao")
+                                {
+                                    <span class="badge bg-success">@order.Status</span>
+                                }
+                                else if (order.Status == "Đã hủy")
+                                {
+                                    <span class="badge bg-danger">@order.Status</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-summary">
+            <p>
+                <strong>Tổng số đơn hàng:</strong> @Model.Count()
+            </p>
+            <p>
+                <strong>Tổng doanh thu:</strong> @Model.Where(o => o.Status != "Đã hủy").Sum(o => o.TotalAmount).ToString("N0") ₫
+            </p>
+        </div>
+    </div>
+</div>

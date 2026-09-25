@@ -1,0 +1,55 @@
+﻿@model SportsShop.Models.Category
+
+@{
+    ViewData["Title"] = "Xóa danh mục";
+}
+
+<h2 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Xóa danh mục</h2>
+<hr />
+
+<div class="alert alert-danger">
+    <h4>Bạn có chắc chắn muốn xóa danh mục này?</h4>
+    <p>Hành động này không thể hoàn tác!</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID:</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Tên danh mục:</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Mô tả:</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Số sản phẩm:</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-warning">@(Model.Products?.Count ?? 0) sản phẩm</span>
+            </dd>
+        </dl>
+
+        @if (Model.Products != null && Model.Products.Any())
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Cảnh báo:</strong> Danh mục này có <strong>@Model.Products.Count sản phẩm</strong>.
+                Không thể xóa!
+            </div>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        }
+        else
+        {
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Xác nhận xóa
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </form>
+        }
+    </div>
+</div>

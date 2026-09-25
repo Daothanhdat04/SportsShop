@@ -1,0 +1,187 @@
+﻿@model SportsShop.Models.Order
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<link rel="stylesheet" href="~/css/orderdetails.css" />
+
+<div class="order-details-container">
+    <div class="back-button-wrapper">
+        <a asp-action="MyOrders" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="details-grid">
+        <div class="grid-item">
+            <div class="info-card order-info">
+                <div class="card-header">
+                    <i class="fas fa-file-alt"></i>
+                    <h5>Thông tin đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-hashtag"></i>
+                            Mã đơn hàng:
+                        </span>
+                        <span class="info-value order-id">#@Model.Id</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="far fa-calendar"></i>
+                            Ngày đặt:
+                        </span>
+                        <span class="info-value">@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Tổng tiền:
+                        </span>
+                        <span class="info-value total-amount">@Model.TotalAmount.ToString("N0") ₫</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-info-circle"></i>
+                            Trạng thái:
+                        </span>
+                        <span class="info-value">
+                            @if (Model.Status == "Đang xử lý")
+                            {
+                                <span class="status-badge status-processing">
+                                    <i class="fas fa-clock"></i>
+                                    @Model.Status
+                                </span>
+                            }
+                            else if (Model.Status == "Đã xác nhận")
+                            {
+                                <span class="status-badge status-confirmed">
+                                    <i class="fas fa-check"></i>
+                                    @Model.Status
+                                </span>
+                            }
+                            else if (Model.Status == "Đang giao hàng")
+                            {
+                                <span class="status-badge status-shipping">
+                                    <i class="fas fa-truck"></i>
+                                    @Model.Status
+                                </span>
+                            }
+                            else if (Model.Status == "Đã giao")
+                            {
+                                <span class="status-badge status-delivered">
+                                    <i class="fas fa-check-double"></i>
+                                    @Model.Status
+                                </span>
+                            }
+                            else if (Model.Status == "Đã hủy")
+                            {
+                                <span class="status-badge status-cancelled">
+                                    <i class="fas fa-times"></i>
+                                    @Model.Status
+                                </span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-item">
+            <div class="info-card shipping-info">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h5>Thông tin giao hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-user"></i>
+                            Người nhận:
+                        </span>
+                        <span class="info-value">@Model.CustomerName</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-phone"></i>
+                            Số điện thoại:
+                        </span>
+                        <span class="info-value">@Model.CustomerPhone</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-envelope"></i>
+                            Email:
+                        </span>
+                        <span class="info-value">@Model.CustomerEmail</span>
+                    </div>
+                    <div class="info-row address-row">
+                        <span class="info-label">
+                            <i class="fas fa-home"></i>
+                            Địa chỉ:
+                        </span>
+                        <span class="info-value address-text">@Model.ShippingAddress</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="products-card">
+        <div class="card-header">
+            <i class="fas fa-shopping-cart"></i>
+            <h5>Chi tiết sản phẩm</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td class="product-name">
+                                    <i class="fas fa-box"></i>
+                                    @detail.Product?.Name
+                                </td>
+                                <td class="product-price">@detail.Price.ToString("N0") ₫</td>
+                                <td class="product-quantity">
+                                    <span class="quantity-badge">@detail.Quantity</span>
+                                </td>
+                                <td class="product-total">@((detail.Price * detail.Quantity).ToString("N0")) ₫</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <th colspan="3">Tổng cộng:</th>
+                            <th class="grand-total">@Model.TotalAmount.ToString("N0") ₫</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Status == "Đang xử lý")
+    {
+        <div class="support-notice">
+            <div class="notice-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="notice-content">
+                <strong>Liên hệ hỗ trợ</strong>
+                <p>Nếu bạn muốn hủy đơn hàng, vui lòng liên hệ: <a href="tel:0123456789" class="phone-link">0123456789</a></p>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,221 @@
+﻿@model SportsShop.Models.Order
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/order-success.css" />
+
+<div class="order-success-container">
+    <div class="container">
+        <!-- Success Animation & Message -->
+        <div class="text-center">
+            <div class="success-icon-wrapper">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <h1 class="success-title">Đặt hàng thành công! 🎉</h1>
+            <p class="success-subtitle">Cảm ơn bạn đã mua hàng tại Shop Đồ Thể Thao</p>
+
+            <div class="order-number-badge">
+                <h4>
+                    <i class="fas fa-receipt"></i>
+                    Mã đơn hàng: <strong>#@Model.Id</strong>
+                </h4>
+            </div>
+        </div>
+
+        <!-- Order Timeline -->
+        <div class="order-timeline">
+            <div class="timeline-step completed">
+                <div class="timeline-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="timeline-label">Đặt hàng</div>
+            </div>
+            <div class="timeline-step active">
+                <div class="timeline-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="timeline-label">Xác nhận</div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="timeline-label">Vận chuyển</div>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="timeline-label">Hoàn thành</div>
+            </div>
+        </div>
+
+        <!-- Order Details -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="order-details-card">
+                    <div class="order-details-header">
+                        <h5>
+                            <i class="fas fa-file-invoice"></i>
+                            Thông tin đơn hàng
+                        </h5>
+                    </div>
+                    <div class="order-details-body">
+                        <!-- Customer Information -->
+                        <div class="customer-info-grid">
+                            <div class="info-item">
+                                <strong>
+                                    <i class="fas fa-user"></i>
+                                    Khách hàng:
+                                </strong>
+                                <span>@Model.CustomerName</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Ngày đặt:
+                                </strong>
+                                <span>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>
+                                    <i class="fas fa-envelope"></i>
+                                    Email:
+                                </strong>
+                                <span>@Model.CustomerEmail</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>
+                                    <i class="fas fa-phone"></i>
+                                    Số điện thoại:
+                                </strong>
+                                <span>@Model.CustomerPhone</span>
+                            </div>
+                            <div class="info-item full-width">
+                                <strong>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Địa chỉ giao hàng:
+                                </strong>
+                                <span>@Model.ShippingAddress</span>
+                            </div>
+                        </div>
+
+                        <hr class="order-divider" />
+
+                        <!-- Product Details -->
+                        <h5 class="product-section-title">
+                            <i class="fas fa-box"></i>
+                            Chi tiết sản phẩm
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detail in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td data-label="Sản phẩm">
+                                                <span class="product-name">@detail.Product?.Name</span>
+                                            </td>
+                                            <td data-label="Số lượng">
+                                                <strong>@detail.Quantity</strong>
+                                            </td>
+                                            <td data-label="Đơn giá">
+                                                @detail.Price.ToString("N0") ₫
+                                            </td>
+                                            <td data-label="Thành tiền">
+                                                <strong>@((detail.Price * detail.Quantity).ToString("N0")) ₫</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3" class="text-end">
+                                            <i class="fas fa-calculator"></i> Tổng cộng:
+                                        </th>
+                                        <th>
+                                            <span class="total-price">@Model.TotalAmount.ToString("N0") ₫</span>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Status Information -->
+                        <div class="status-alert">
+                            <strong>
+                                <i class="fas fa-info-circle"></i>
+                                Trạng thái đơn hàng:
+                                <span class="badge bg-warning">@Model.Status</span>
+                            </strong>
+                            <small>
+                                <i class="fas fa-bell"></i>
+                                Chúng tôi sẽ liên hệ với bạn sớm nhất để xác nhận đơn hàng.
+                                Một email xác nhận đã được gửi đến <strong>@Model.CustomerEmail</strong>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="order-actions">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home"></i>
+                        Về trang chủ
+                    </a>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg">
+                        <i class="fas fa-shopping-bag"></i>
+                        Tiếp tục mua hàng
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confetti Animation (Optional) -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+@section Scripts {
+    <script>
+        // Confetti animation on page load
+        window.addEventListener('load', function() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ffa500', '#48bb78', '#4299e1', '#f56565', '#ecc94b'];
+
+            for(let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    container.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        });
+
+        // Auto scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    </script>
+}

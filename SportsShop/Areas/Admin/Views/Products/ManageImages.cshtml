@@ -1,0 +1,213 @@
+﻿@model SportsShop.Models.Product
+
+@{
+    ViewData["Title"] = "Quản lý ảnh sản phẩm";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-images"></i> Quản lý ảnh: @Model.Name</h2>
+        <p class="text-muted">Thêm nhiều ảnh để khách hàng xem rõ hơn sản phẩm</p>
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <!-- Form Upload -->
+    <div class="col-md-4">
+        <div class="card sticky-top" style="top: 20px;">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-upload"></i> Upload ảnh mới</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="UploadProductImage" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Chọn ảnh <span class="text-danger">*</span></label>
+                        <input type="file"
+                               name="file"
+                               class="form-control"
+                               accept="image/*"
+                               required
+                               onchange="previewImage(this)" />
+                        <small class="text-muted">
+                            Định dạng: JPG, PNG, GIF, WEBP<br />
+                            Kích thước tối đa: 5MB
+                        </small>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="mb-3">
+                        <img id="imagePreview"
+                             src=""
+                             alt="Preview"
+                             style="max-width: 100%; display: none; border-radius: 8px;"
+                             class="img-thumbnail" />
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="isPrimary" class="form-check-input" id="isPrimary" />
+                        <label class="form-check-label" for="isPrimary">
+                            Đặt làm ảnh chính
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-upload"></i> Upload ảnh
+                    </button>
+                </form>
+
+                <hr />
+
+                <div class="alert alert-info mb-0">
+                    <strong>💡 Lưu ý:</strong>
+                    <ul class="mb-0 small">
+                        <li>Ảnh chính sẽ hiển thị đầu tiên</li>
+                        <li>Nên upload 3-5 ảnh cho mỗi sản phẩm</li>
+                        <li>Ảnh nên có tỷ lệ vuông (1:1)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery hiện tại -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5><i class="fas fa-images"></i> Gallery (@(Model.Images?.Count ?? 0) ảnh)</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Images == null || !Model.Images.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        <i class="fas fa-image fa-3x mb-3"></i>
+                        <h5>Chưa có ảnh nào</h5>
+                        <p>Hãy upload ảnh đầu tiên cho sản phẩm này</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="row g-3">
+                        @foreach (var image in Model.Images.OrderBy(i => i.DisplayOrder))
+                        {
+                            <div class="col-md-4">
+                                <div class="card h-100 @(image.IsPrimary ? "border-primary" : "")">
+                                    <img src="@image.ImageUrl"
+                                         class="card-img-top"
+                                         alt="Product image"
+                                         style="height: 200px; object-fit: cover; cursor: pointer;"
+                                         onclick="viewFullImage('@image.ImageUrl')" />
+
+                                    @if (image.IsPrimary)
+                                    {
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-star"></i> Ảnh chính
+                                            </span>
+                                        </div>
+                                    }
+
+                                    <div class="card-body p-2">
+                                        <div class="btn-group w-100" role="group">
+                                            @if (!image.IsPrimary)
+                                            {
+                                                <form asp-action="SetPrimaryImage" method="post" class="d-inline">
+                                                    <input type="hidden" name="imageId" value="@image.Id" />
+                                                    <input type="hidden" name="productId" value="@Model.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Đặt làm ảnh chính">
+                                                        <i class="fas fa-star"></i>
+                                                    </button>
+                                                </form>
+                                            }
+
+                                            <form asp-action="ReorderImages" method="post" class="d-inline">
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <input type="hidden" name="imageId" value="@image.Id" />
+                                                <input type="hidden" name="direction" value="up" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="Di chuyển lên">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="ReorderImages" method="post" class="d-inline">
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <input type="hidden" name="imageId" value="@image.Id" />
+                                                <input type="hidden" name="direction" value="down" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="Di chuyển xuống">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="DeleteProductImage" method="post" class="d-inline" onsubmit="return confirm('Xóa ảnh này?')">
+                                                <input type="hidden" name="id" value="@image.Id" />
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa ảnh">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xem ảnh full -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img id="modalImage" src="" class="w-100" alt="Full image" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function viewFullImage(url) {
+            document.getElementById('modalImage').src = url;
+            new bootstrap.Modal(document.getElementById('imageModal')).show();
+        }
+    </script>
+}

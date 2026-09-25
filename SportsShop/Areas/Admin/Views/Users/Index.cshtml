@@ -1,0 +1,100 @@
+﻿@model IEnumerable<(SportsShop.Models.ApplicationUser User, string Role)>
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/AdminUsers.css" />
+
+<!-- Page Header -->
+<div class="users-page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2><i class="fas fa-users"></i> Quản lý người dùng</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Thêm người dùng
+        </a>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="card users-search-card">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm theo tên, email, số điện thoại..." />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="card users-table-card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table users-table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tạo</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.User.FullName</td>
+                            <td>@item.User.Email</td>
+                            <td>@item.User.PhoneNumber</td>
+                            <td>@item.User.Address</td>
+                            <td>
+                                @if (item.Role == "Admin")
+                                {
+                                    <span class="badge bg-danger">Admin</span>
+                                }
+                                else if (item.Role == "Customer")
+                                {
+                                    <span class="badge bg-primary">Customer</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@item.Role</span>
+                                }
+                            </td>
+                            <td>@item.User.CreatedDate.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.User.Id" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.User.Id" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                @if (item.Role != "Admin")
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.User.Id" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="users-summary">
+            <p>Tổng số người dùng: <strong>@Model.Count()</strong></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,183 @@
+﻿@model IEnumerable<SportsShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+    var lowStockProducts = Model.Where(p => p.Stock < 10).ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-products.css" />
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 page-header">
+    <h2><i class="fas fa-box"></i> Quản lý sản phẩm</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm sản phẩm
+    </a>
+</div>
+
+<!-- ✅ CẢNH BÁO SẢN PHẨM SẮP HẾT HÀNG -->
+@if (lowStockProducts.Any())
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas fa-exclamation-triangle"></i>
+            Cảnh báo: Có @lowStockProducts.Count sản phẩm sắp hết hàng!
+        </h5>
+        <hr>
+        <div class="row">
+            @foreach (var product in lowStockProducts.Take(5))
+            {
+                <div class="col-md-12 mb-2">
+                    <div class="d-flex align-items-center">
+                        <img src="@product.ImageUrl" alt="@product.Name"
+                             style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"
+                             class="rounded">
+                        <div class="flex-grow-1">
+                            <strong>@product.Name</strong>
+                            <span class="badge bg-danger ms-2">Còn @product.Stock</span>
+                        </div>
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Nhập thêm
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (lowStockProducts.Count > 5)
+        {
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                Và @(lowStockProducts.Count - 5) sản phẩm khác...
+            </small>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Search & Filter -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="col-md-5">
+                    <input type="text" name="searchString" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
+                </div>
+                <div class="col-md-4">
+                    <select name="categoryId" class="form-select">
+                        <option value="">-- Tất cả danh mục --</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id" selected="@(ViewBag.CurrentCategory == category.Id)">
+                                @category.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Products Table -->
+<div class="card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Giá</th>
+                        <th>Tồn kho</th>
+                        <th>Size/Màu</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@(item.Stock < 10 ? "table-warning" : "")">
+                            <td>@item.Id</td>
+                            <td>
+                                <img src="@item.ImageUrl" alt="@item.Name" style="width: 60px; height: 60px; object-fit: cover;" />
+                            </td>
+                            <td>
+                                <strong>@item.Name</strong><br />
+                                <small class="text-muted">@item.Description</small>
+                                @if (item.Stock < 10)
+                                {
+                                    <br>
+                                    <small class="badge bg-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> Sắp hết hàng
+                                    </small>
+                                }
+                            </td>
+                            <td>@item.Category?.Name</td>
+                            <td><strong>@item.Price.ToString("N0") ₫</strong></td>
+                            <td>
+                                @if (item.Stock < 10)
+                                {
+                                    <span class="badge bg-danger">@item.Stock</span>
+                                }
+                                else if (item.Stock < 20)
+                                {
+                                    <span class="badge bg-warning">@item.Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">@item.Stock</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.HasVariants)
+                                {
+                                    <span class="badge bg-info">Có</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Không</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="ManageImages" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-images"></i> Ảnh
+                                </a>
+                                @if (item.HasVariants)
+                                {
+                                    <a asp-action="ManageVariants" asp-route-id="@item.Id" class="btn btn-sm btn-success">
+                                        <i class="fas fa-palette"></i> Biến thể
+                                    </a>
+                                }
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-3">
+            <p class="text-muted">
+                <strong>Tổng số sản phẩm:</strong> @Model.Count()<br />
+                <strong>Sản phẩm sắp hết hàng (< 10):</strong>
+                <span class="badge bg-danger">@lowStockProducts.Count</span>
+            </p>
+        </div>
+    </div>
+</div>

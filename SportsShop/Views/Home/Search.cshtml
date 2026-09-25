@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SportsShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Kết quả tìm kiếm";
+}
+<link rel="stylesheet" href="~/css/Search.css" asp-append-version="true" />
+
+<h2>Kết quả tìm kiếm cho: "<strong>@ViewBag.SearchQuery</strong>"</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning mt-4">
+        <h4>😔 Không tìm thấy sản phẩm nào!</h4>
+        <p>Vui lòng thử lại với từ khóa khác hoặc <a asp-action="Index" asp-controller="Products">xem tất cả sản phẩm</a>.</p>
+    </div>
+}
+else
+{
+    <p class="text-muted mb-4">Tìm thấy <strong>@Model.Count()</strong> sản phẩm</p>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="@item.PrimaryImageUrl" class="card-img-top product-image" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">@item.Name</h6>
+                        <p class="card-text">
+                            @if (item.IsOnDiscount)
+                            {
+                                <span class="text-decoration-line-through text-muted">@item.Price.ToString("N0") ₫</span>
+                                <br />
+                                <strong class="text-danger fs-5">@item.DisplayPrice.ToString("N0") ₫</strong>
+                                <span class="badge bg-danger ms-2">-@item.DiscountPercent%</span>
+                            }
+                            else
+                            {
+                                <strong class="text-danger fs-5">@item.Price.ToString("N0") ₫</strong>
+                            }
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                📦 Danh mục: @item.Category?.Name<br />
+                                📊 Còn lại: @item.Stock
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Xem chi tiết</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.Id" class="btn btn-sm btn-success">Thêm giỏ</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-sm btn-warning">Đăng nhập</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

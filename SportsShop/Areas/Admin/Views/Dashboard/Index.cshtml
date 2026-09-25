@@ -1,0 +1,255 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/AdminDashboard.css" />
+
+<!-- Page Header -->
+<div class="dashboard-page-header">
+    <h2><i class="fas fa-tachometer-alt"></i> Dashboard - Tổng quan hệ thống</h2>
+</div>
+
+<!-- Thống kê Cards -->
+<div class="row dashboard-stats-row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card dashboard-stats-card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng doanh thu
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.TotalRevenue.ToString("N0") ₫
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card dashboard-stats-card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Tổng đơn hàng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card dashboard-stats-card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Đơn chờ xử lý
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card dashboard-stats-card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Tổng người dùng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalUsers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts và Tables -->
+<div class="row">
+    <!-- Biểu đồ doanh thu -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card dashboard-chart-card shadow">
+            <div class="card-header py-3">
+                <h6>
+                    <i class="fas fa-chart-line"></i> Doanh thu 7 ngày gần đây
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thống kê nhanh -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card dashboard-quick-stats-card shadow">
+            <div class="card-header py-3">
+                <h6>
+                    <i class="fas fa-info-circle"></i> Thống kê nhanh
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>Tổng sản phẩm</h6>
+                    <h4 class="text-primary">@ViewBag.TotalProducts</h4>
+                </div>
+                <hr />
+                <div class="mb-3">
+                    <h6>Tổng danh mục</h6>
+                    <h4 class="text-success">@ViewBag.TotalCategories</h4>
+                </div>
+                <hr />
+                <div class="mb-3">
+                    <h6>Sản phẩm sắp hết</h6>
+                    <h4 class="text-warning">@ViewBag.LowStockProducts</h4>
+                </div>
+                <hr />
+                <div>
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-primary btn-block">
+                        <i class="fas fa-box"></i> Quản lý sản phẩm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Đơn hàng mới nhất và Sản phẩm bán chạy -->
+<div class="row">
+    <!-- Đơn hàng mới nhất -->
+    <div class="col-lg-6">
+        <div class="card dashboard-table-card shadow">
+            <div class="card-header py-3">
+                <h6>
+                    <i class="fas fa-shopping-cart"></i> Đơn hàng mới nhất
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table dashboard-table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Mã ĐH</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in ViewBag.RecentOrders)
+                            {
+                                <tr>
+                                    <td><strong>#@order.Id</strong></td>
+                                    <td>@order.CustomerName</td>
+                                    <td>@order.TotalAmount.ToString("N0") ₫</td>
+                                    <td>
+                                        <span class="badge badge-warning">@order.Status</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-primary btn-sm dashboard-view-all-btn">
+                    Xem tất cả <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sản phẩm bán chạy -->
+    <div class="col-lg-6">
+        <div class="card dashboard-table-card dashboard-top-products-card shadow">
+            <div class="card-header py-3">
+                <h6>
+                    <i class="fas fa-fire"></i> Sản phẩm bán chạy
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table dashboard-table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Đã bán</th>
+                                <th>Còn lại</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.TopProducts)
+                            {
+                                <tr>
+                                    <td>@item.Product?.Name</td>
+                                    <td><span class="badge badge-success">@item.TotalSold</span></td>
+                                    <td>@item.Product?.Stock</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Biểu đồ doanh thu
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.Last7Days)),
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: @Html.Raw(Json.Serialize(ViewBag.DailyRevenue)),
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('vi-VN') + ' ₫';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

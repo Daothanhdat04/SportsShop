@@ -1,0 +1,263 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Phân trang */
+.pagination {
+    margin-top: 20px;
+}
+
+.page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.page-link {
+    color: #0d6efd;
+}
+
+    .page-link:hover {
+        background-color: #e9ecef;
+    }
+
+/* Card sản phẩm */
+.card {
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    }
+
+/* Search form */
+.card-header h5 {
+    margin: 0;
+}
+
+/* ========== PRODUCT GALLERY ========== */
+
+/* Main image zoom effect */
+#mainImage {
+    transition: transform 0.3s ease;
+}
+
+/* Thumbnail styles */
+.img-thumbnail {
+    transition: all 0.3s ease;
+    border: 2px solid #dee2e6;
+}
+
+    .img-thumbnail:hover {
+        border-color: #0d6efd;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .img-thumbnail.border-primary {
+        border-width: 3px !important;
+    }
+
+/* Cursor pointer */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Image modal */
+#imageModal .modal-body {
+    background: #000;
+}
+
+#modalImage {
+    cursor: zoom-out;
+}
+
+/* Gallery grid in admin */
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Badge overlay */
+.position-absolute {
+    z-index: 10;
+}
+
+/* Upload preview */
+#imagePreview {
+    border: 2px dashed #dee2e6;
+    padding: 10px;
+}
+
+/* Responsive gallery */
+@media (max-width: 768px) {
+    #mainImage {
+        height: 300px !important;
+    }
+
+    .img-thumbnail {
+        height: 60px !important;
+    }
+}
+
+/* Star Rating CSS */
+.star-rating {
+    direction: rtl;
+    display: inline-flex;
+    font-size: 2rem;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label.star {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+    .star-rating input[type="radio"]:checked ~ label.star,
+    .star-rating label.star:hover,
+    .star-rating label.star:hover ~ label.star {
+        color: #ffc107;
+    }
+
+/* 🌈 Navbar cải tiến */
+.navbar {
+    background: linear-gradient(90deg, #0d6efd, #00bcd4);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .navbar .navbar-brand {
+        font-weight: 700;
+        color: #fff !important;
+        letter-spacing: 1px;
+    }
+
+    .navbar .nav-link {
+        color: #f8f9fa !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+        .navbar .nav-link:hover {
+            color: #ffe082 !important;
+        }
+
+.navbar-toggler {
+    border-color: #fff;
+}
+
+/* 🔍 Search box */
+.navbar form input {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+}
+
+.navbar form button {
+    border-radius: 20px;
+    margin-left: 5px;
+    color: #fff;
+    border-color: #fff;
+}
+
+    .navbar form button:hover {
+        background-color: #fff;
+        color: #0d6efd;
+    }
+
+/* 👤 Dropdown */
+.dropdown-menu {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* 📦 Main container */
+main {
+    margin-top: 30px;
+    margin-bottom: 60px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* 👣 Footer */
+footer {
+    background: #0d6efd;
+    color: white;
+    padding: 15px 0;
+}
+
+    footer a {
+        color: #ffe082;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+/* ✨ Hiệu ứng fade */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* 📄 Trang Chính sách bảo mật */
+.privacy-policy h1 {
+    font-size: 2rem;
+}
+
+.privacy-policy h4 {
+    font-size: 1.2rem;
+    border-left: 4px solid #0d6efd;
+    padding-left: 10px;
+}
+
+.privacy-policy p,
+.privacy-policy li {
+    line-height: 1.7;
+}
+
+.privacy-policy ul {
+    list-style-type: disc;
+    margin-left: 25px;
+}
+.dropdown-item.logout-btn {
+    color: #dc3545; /* đỏ */
+    font-weight: 600;
+}
+
+    .dropdown-item.logout-btn:hover {
+        background-color: #ffe5e5;
+        color: #b30000;
+    }

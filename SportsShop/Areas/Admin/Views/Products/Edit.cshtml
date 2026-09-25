@@ -1,0 +1,121 @@
+﻿@model SportsShop.Models.Product
+
+@{
+    ViewData["Title"] = "Sửa sản phẩm";
+}
+
+<h2><i class="fas fa-edit"></i> Sửa sản phẩm</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Tên sản phẩm</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Price" class="form-label">Giá gốc (VNĐ) <span class="text-danger">*</span></label>
+                            <input asp-for="Price" class="form-control" type="number" min="0" required />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Stock" class="form-label">Tồn kho</label>
+                            <input asp-for="Stock" class="form-control" type="number" />
+                            <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="DiscountPercent" class="form-label">% Giảm giá</label>
+                            <input asp-for="DiscountPercent" class="form-control" type="number" min="0" max="100" id="discountPercent" onchange="calculateDiscountPrice()" />
+                            <small class="text-muted">Để trống nếu không giảm</small>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="DiscountPrice" class="form-label">Giá sau giảm (VNĐ)</label>
+                            <input asp-for="DiscountPrice" class="form-control" type="number" min="0" id="discountPrice" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DiscountStartDate" class="form-label">Ngày bắt đầu giảm</label>
+                            <input asp-for="DiscountStartDate" class="form-control" type="datetime-local" />
+                            <small class="text-muted">Để trống = bắt đầu ngay</small>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DiscountEndDate" class="form-label">Ngày kết thúc giảm</label>
+                            <input asp-for="DiscountEndDate" class="form-control" type="datetime-local" />
+                            <small class="text-muted">Để trống = không giới hạn</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label">Danh mục</label>
+                        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ImageUrl" class="form-label">URL hình ảnh</label>
+                        <input asp-for="ImageUrl" class="form-control" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="HasVariants" class="form-check-input" />
+                        <label asp-for="HasVariants" class="form-check-label">Sản phẩm có size/màu?</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Cập nhật
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function calculateDiscountPrice() {
+            const price = parseFloat(document.querySelector('input[name="Price"]').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+
+            if (discountPercent > 0 && discountPercent <= 100) {
+                const discountPrice = price - (price * discountPercent / 100);
+                document.getElementById('discountPrice').value = Math.round(discountPrice);
+            } else {
+                document.getElementById('discountPrice').value = '';
+            }
+        }
+
+        // Tính lại khi thay đổi giá gốc
+        document.querySelector('input[name="Price"]').addEventListener('change', calculateDiscountPrice);
+    </script>
+}

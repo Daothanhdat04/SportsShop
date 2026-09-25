@@ -1,0 +1,365 @@
+﻿/* ========================================
+   ADMIN REPORTS PAGE STYLES
+   ======================================== */
+
+/* Page Header */
+.reports-page-header {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
+}
+
+    .reports-page-header h2 {
+        color: #2c3e50;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+    }
+
+        .reports-page-header h2 i {
+            margin-right: 0.5rem;
+            color: #17a2b8;
+        }
+
+/* Filter Card */
+.reports-filter-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+    .reports-filter-card:hover {
+        box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    .reports-filter-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .reports-filter-card label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.3rem;
+    }
+
+    .reports-filter-card .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 0.6rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .reports-filter-card .form-select:focus {
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.15);
+        }
+
+    .reports-filter-card .btn-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .reports-filter-card .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+/* Statistics Cards */
+.stats-overview-row {
+    margin-bottom: 2rem;
+}
+
+.stats-overview-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 1rem;
+}
+
+    .stats-overview-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .stats-overview-card.border-left-primary {
+        border-left: 5px solid #007bff;
+        background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    }
+
+    .stats-overview-card.border-left-success {
+        border-left: 5px solid #28a745;
+        background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+    }
+
+    .stats-overview-card.border-left-info {
+        border-left: 5px solid #17a2b8;
+        background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+    }
+
+    .stats-overview-card.border-left-warning {
+        border-left: 5px solid #ffc107;
+        background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+    }
+
+    .stats-overview-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .stats-overview-card .text-xs {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stats-overview-card .h5 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .stats-overview-card .fa-2x {
+        font-size: 2.5rem;
+        opacity: 0.3;
+    }
+
+/* Chart Cards */
+.chart-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+    .chart-card .card-header {
+        padding: 1rem 1.5rem;
+        border: none;
+    }
+
+        .chart-card .card-header h6 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+            .chart-card .card-header h6 i {
+                margin-right: 0.5rem;
+            }
+
+    .chart-card .card-body {
+        padding: 1.5rem;
+    }
+
+/* Monthly Stats Card */
+.monthly-stats-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+    .monthly-stats-card h6,
+    .monthly-stats-card h3 {
+        color: white;
+    }
+
+    .monthly-stats-card .text-success,
+    .monthly-stats-card .text-info {
+        color: white !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+/* Status Chart Card */
+.status-chart-card {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+}
+
+/* Revenue Chart Card */
+.revenue-chart-card {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Category Chart Card */
+.category-chart-card {
+    background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+}
+
+/* Top Tables Card */
+.top-products-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.top-customers-card {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Tables in Charts Section */
+.chart-card table {
+    margin-bottom: 0;
+}
+
+    .chart-card table thead {
+        background: rgba(0,0,0,0.05);
+    }
+
+        .chart-card table thead th {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 0.75rem;
+        }
+
+    .chart-card table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+        .chart-card table tbody tr:hover {
+            background: rgba(0,0,0,0.03);
+            transform: scale(1.005);
+        }
+
+    .chart-card table tbody td {
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+
+/* Badge Styles */
+.badge {
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .badge.bg-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+
+/* Monthly Stats Center Content */
+.monthly-stats-center {
+    padding: 1.5rem;
+}
+
+    .monthly-stats-center h6 {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+    }
+
+    .monthly-stats-center h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reports-page-header {
+        padding: 1.5rem;
+    }
+
+        .reports-page-header h2 {
+            font-size: 1.5rem;
+        }
+
+    .stats-overview-card .h5 {
+        font-size: 1.5rem;
+    }
+
+    .stats-overview-card .fa-2x {
+        font-size: 2rem;
+    }
+
+    .chart-card table {
+        font-size: 0.85rem;
+    }
+
+        .chart-card table thead th,
+        .chart-card table tbody td {
+            padding: 0.5rem;
+        }
+
+    .monthly-stats-center h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stats-overview-card,
+.chart-card,
+.reports-filter-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+    /* Chart Container */
+    .chart-card canvas {
+        max-height: 400px;
+    }
+
+/* Small Stats in Monthly Card */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    text-align: center;
+}
+
+/* Icon Pulse Animation */
+@keyframes iconPulse {
+    0%, 100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.stats-overview-card:hover .fa-2x {
+    animation: iconPulse 2s infinite;
+}
+
+/* Top Products & Customers Enhanced */
+.top-products-card table tbody tr td:first-child,
+.top-customers-card table tbody tr td:first-child {
+    font-weight: 600;
+}
+
+.top-customers-card table tbody tr td small {
+    display: block;
+    margin-top: 0.2rem;
+    opacity: 0.8;
+}
+
+/* Revenue Number Highlight */
+.chart-card table strong {
+    color: #28a745;
+    font-size: 1.05rem;
+}

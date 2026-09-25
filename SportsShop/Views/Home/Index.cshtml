@@ -1,0 +1,608 @@
+﻿@model IEnumerable<SportsShop.Models.Product>
+@{
+    ViewData["Title"] = "Trang Chủ";
+}
+<link rel="stylesheet" href="~/css/home.css" />
+
+<!-- Hero Carousel -->
+<section id="home-section" class="hero">
+    <div class="home-slider owl-carousel hero-carousel">
+        <div class="slider-item carousel-slide active">
+            <div class="overlay"></div>
+            <div class="container-fluid p-0">
+                <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-end">
+                    <img class="one-third order-md-last img-fluid" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=600&fit=crop" alt="Banner 1">
+                    <div class="one-forth d-flex align-items-center ftco-animate">
+                        <div class="text">
+                            <span class="subheading">#New Arrival</span>
+                            <div class="horizontal">
+                                <h1 class="mb-4 mt-3">TIME TO SHINE</h1>
+                                <p class="mb-4">Bộ sưu tập thể thao mới nhất dành cho bạn</p>
+                                <p><a href="#products" class="btn-custom">Khám phá ngay</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-item carousel-slide">
+            <div class="overlay"></div>
+            <div class="container-fluid p-0">
+                <div class="row d-flex no-gutters slider-text align-items-center justify-content-end">
+                    <img class="one-third order-md-last img-fluid" src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&h=600&fit=crop" alt="Banner 2">
+                    <div class="one-forth d-flex align-items-center ftco-animate">
+                        <div class="text">
+                            <span class="subheading">#Hot Sale</span>
+                            <div class="horizontal">
+                                <h1 class="mb-4 mt-3">NÂNG TẦM PHONG CÁCH</h1>
+                                <p class="mb-4">Giảm giá đến 50% cho tất cả sản phẩm</p>
+                                <p><a href="#products" class="btn-custom">Mua ngay</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-item carousel-slide">
+            <div class="overlay"></div>
+            <div class="container-fluid p-0">
+                <div class="row d-flex no-gutters slider-text align-items-center justify-content-end">
+                    <img class="one-third order-md-last img-fluid" src="https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?w=800&h=600&fit=crop" alt="Banner 3">
+                    <div class="one-forth d-flex align-items-center ftco-animate">
+                        <div class="text">
+                            <span class="subheading">#Premium Quality</span>
+                            <div class="horizontal">
+                                <h1 class="mb-4 mt-3">CHẤT LƯỢNG HÀNG ĐẦU</h1>
+                                <p class="mb-4">Miễn phí giao hàng toàn quốc</p>
+                                <p><a href="#products" class="btn-custom">Xem thêm</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="ftco-section ftco-no-pt ftco-no-pb py-5">
+    <div class="container">
+        <div class="row no-gutters ftco-services">
+            <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services p-4 py-md-5">
+                    <div class="icon d-flex justify-content-center align-items-center mb-4">
+                        <span class="flaticon-bag"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Miễn phí vận chuyển</h3>
+                        <p>Giao hàng miễn phí cho đơn hàng trên 500.000đ</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services p-4 py-md-5">
+                    <div class="icon d-flex justify-content-center align-items-center mb-4">
+                        <span class="flaticon-customer-service"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Hỗ trợ 24/7</h3>
+                        <p>Đội ngũ hỗ trợ khách hàng nhiệt tình, chu đáo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+                <div class="media block-6 services p-4 py-md-5">
+                    <div class="icon d-flex justify-content-center align-items-center mb-4">
+                        <span class="flaticon-payment-security"></span>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="heading">Thanh toán bảo mật</h3>
+                        <p>Giao dịch an toàn với nhiều phương thức thanh toán</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="ftco-section bg-light" id="products">
+    <div class="container">
+        <!-- Category Filter -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-12 text-center">
+                <div class="btn-group flex-wrap category-filter" role="group">
+                    <a asp-action="Index" class="btn @(ViewBag.SelectedCategory == null ? "btn-primary" : "btn-outline-primary")">
+                        Tất cả
+                    </a>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <a asp-action="Index" asp-route-categoryId="@category.Id"
+                           class="btn @(ViewBag.SelectedCategory?.Id == category.Id ? "btn-primary" : "btn-outline-primary")">
+                            @category.Name
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="row justify-content-center mb-3 pb-3">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                @if (ViewBag.SelectedCategory != null)
+                {
+                    <h2 class="mb-4">@ViewBag.SelectedCategory.Name</h2>
+                }
+                else
+                {
+                    <h2 class="mb-4">Sản phẩm nổi bật</h2>
+                }
+                <p>Khám phá bộ sưu tập thể thao cao cấp với chất lượng tốt nhất</p>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        @if (!Model.Any())
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info text-center">
+                        <p class="mb-0">Chưa có sản phẩm nào trong danh mục này.</p>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
+                        <div class="product d-flex flex-column">
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="img-prod">
+                                <img class="img-fluid" src="@item.PrimaryImageUrl" alt="@item.Name">
+                                @if (item.IsOnDiscount)
+                                {
+                                    <span class="status">-@item.DiscountPercent%</span>
+                                }
+                                <div class="overlay"></div>
+                            </a>
+                            <div class="text py-3 pb-4 px-3 text-center">
+                                <h3><a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h3>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <div class="cat">
+                                        <span>@item.Category?.Name</span>
+                                    </div>
+                                </div>
+                                <div class="pricing">
+                                    @if (item.IsOnDiscount)
+                                    {
+                                        <p class="price">
+                                            <span class="mr-2 price-dc">@item.Price.ToString("N0") ₫</span>
+                                            <span class="price-sale">@item.DisplayPrice.ToString("N0") ₫</span>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="price"><span>@item.Price.ToString("N0") ₫</span></p>
+                                    }
+                                </div>
+                                <p class="bottom-area d-flex px-3">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.Id"
+                                           class="add-to-cart text-center py-2 mr-1">
+                                            <span>Thêm vào giỏ <i class="ion-ios-add ml-1"></i></span>
+                                        </a>
+                                        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id"
+                                           class="buy-now text-center py-2">
+                                            Xem chi tiết<span><i class="ion-ios-arrow-forward ml-1"></i></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Index", "Home")"
+                                           class="add-to-cart text-center py-2 mr-1">
+                                            <span>Đăng nhập</span>
+                                        </a>
+                                        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id"
+                                           class="buy-now text-center py-2">
+                                            Xem chi tiết<span><i class="ion-ios-arrow-forward ml-1"></i></span>
+                                        </a>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- View All Products Button -->
+        <div class="row mt-5">
+            <div class="col text-center">
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg px-5">
+                    Xem tất cả sản phẩm
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section Styles */
+    .hero {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .home-slider {
+        position: relative;
+        height: 620px;
+        background: #d9d9d9;
+    }
+
+    .slider-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        background: #d9d9d9;
+    }
+
+        .slider-item.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slider-item .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.22);
+            z-index: 1;
+        }
+
+        .slider-item .container-fluid {
+            height: 100%;
+        }
+
+        .slider-item .row {
+            height: 100%;
+        }
+
+        .slider-item img {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 62%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+    .one-forth {
+        width: 38%;
+        position: relative;
+        z-index: 2;
+        padding: 0 30px 0 60px;
+        margin-left: 8%;
+    }
+
+    .slider-item .text {
+        color: #fff;
+        text-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+    }
+
+    .slider-item .subheading {
+        font-size: 18px;
+        color: #ffc107;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+    }
+
+    .slider-item h1 {
+        font-size: 58px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 0.96;
+        letter-spacing: -1px;
+    }
+
+    .slider-item p {
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.92);
+        line-height: 1.5;
+    }
+
+    .btn-custom {
+        padding: 16px 36px;
+        background: linear-gradient(135deg, #0c69d8, #2ca8ff);
+        color: #fff;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 700;
+        box-shadow: 0 8px 18px rgba(12, 105, 216, 0.25);
+    }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #0059c9, #1d8fe2);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(12, 105, 216, 0.35);
+        }
+
+    /* Services Section */
+    .block-6 {
+        border-radius: 10px;
+        background: #fff;
+        transition: all 0.3s;
+    }
+
+        .block-6:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .block-6 .icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-size: 40px;
+        }
+
+            .block-6 .icon span:before {
+                content: "📦";
+            }
+
+    .flaticon-customer-service:before {
+        content: "🎧";
+    }
+
+    .flaticon-payment-security:before {
+        content: "🔒";
+    }
+
+    .block-6 .heading {
+        font-size: 20px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 10px;
+    }
+
+    /* Category Filter */
+    .category-filter .btn {
+        margin: 5px;
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .category-filter .btn-primary {
+        background: #007bff;
+        border-color: #007bff;
+    }
+
+    .category-filter .btn-outline-primary:hover {
+        background: #007bff;
+        color: #fff;
+    }
+
+    /* Product Card Styles */
+    .product {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+        .product:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .product .img-prod {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            height: 300px;
+        }
+
+            .product .img-prod img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+
+        .product:hover .img-prod img {
+            transform: scale(1.1);
+        }
+
+        .product .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .product:hover .overlay {
+            opacity: 1;
+        }
+
+        .product .status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .product .text h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+            .product .text h3 a {
+                color: #000;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+
+                .product .text h3 a:hover {
+                    color: #007bff;
+                }
+
+        .product .cat span {
+            background: #f8f9fa;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .product .pricing .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #dc3545;
+            margin: 15px 0;
+        }
+
+        .product .price-dc {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .product .price-sale {
+            color: #dc3545;
+        }
+
+        .product .bottom-area {
+            margin: 0;
+        }
+
+        .product .add-to-cart,
+        .product .buy-now {
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .product .add-to-cart {
+            background: #28a745;
+            color: #fff;
+        }
+
+            .product .add-to-cart:hover {
+                background: #218838;
+                color: #fff;
+            }
+
+        .product .buy-now {
+            background: #007bff;
+            color: #fff;
+        }
+
+            .product .buy-now:hover {
+                background: #0056b3;
+                color: #fff;
+            }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .slider-item h1 {
+            font-size: 32px;
+        }
+
+        .slider-item img {
+            width: 100%;
+            opacity: 0.3;
+        }
+
+        .one-forth {
+            width: 100%;
+            text-align: center;
+        }
+
+        .product .img-prod {
+            height: 250px;
+        }
+    }
+
+    /* Animation */
+    .ftco-animate {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    // Carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        let currentSlide = 0;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        // Auto play every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>

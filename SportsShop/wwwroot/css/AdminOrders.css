@@ -1,0 +1,370 @@
+﻿/* ========================================
+   ADMIN ORDERS PAGE STYLES
+   ======================================== */
+
+/* Page Header */
+.orders-page-header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+}
+
+    .orders-page-header h2 {
+        color: white;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+        .orders-page-header h2 i {
+            margin-right: 0.5rem;
+        }
+
+/* Search & Filter Card */
+.search-filter-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+    .search-filter-card:hover {
+        box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    .search-filter-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .search-filter-card .form-control,
+    .search-filter-card .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 0.6rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .search-filter-card .form-control:focus,
+        .search-filter-card .form-select:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.15);
+        }
+
+    .search-filter-card label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.3rem;
+    }
+
+    .search-filter-card .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .search-filter-card .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+    .search-filter-card .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .search-filter-card .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+/* Statistics Cards */
+.stats-cards-row {
+    margin-bottom: 2rem;
+}
+
+.stats-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .stats-card.border-left-warning {
+        border-left: 5px solid #ffc107;
+        background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+    }
+
+    .stats-card.border-left-info {
+        border-left: 5px solid #17a2b8;
+        background: linear-gradient(135deg, #e6f7f9 0%, #ffffff 100%);
+    }
+
+    .stats-card.border-left-success {
+        border-left: 5px solid #28a745;
+        background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+    }
+
+    .stats-card.border-left-primary {
+        border-left: 5px solid #4facfe;
+        background: linear-gradient(135deg, #e6f4ff 0%, #ffffff 100%);
+    }
+
+    .stats-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .stats-card h6 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .stats-card h4 {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+/* Orders Table Card */
+.orders-table-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* Table Styles */
+.orders-table {
+    margin-bottom: 0;
+}
+
+    .orders-table thead {
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    }
+
+        .orders-table thead th {
+            color: #2c3e50;
+            font-weight: 700;
+            border: none;
+            padding: 1rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+    .orders-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .orders-table tbody tr:hover {
+            background: linear-gradient(90deg, #f0f9ff 0%, #ffffff 100%);
+            transform: scale(1.005);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+    .orders-table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+        /* Order ID Column */
+        .orders-table tbody td:first-child strong {
+            color: #4facfe;
+            font-size: 1.1rem;
+        }
+
+        /* Customer Info Column */
+        .orders-table tbody td:nth-child(2) strong {
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .orders-table tbody td:nth-child(2) small {
+            display: block;
+            margin-top: 0.2rem;
+            color: #6c757d;
+        }
+
+        /* Total Amount Column */
+        .orders-table tbody td:nth-child(5) strong {
+            color: #28a745;
+            font-size: 1.1rem;
+        }
+
+/* Badge Styles */
+.badge {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+        color: #000;
+    }
+
+    .badge.bg-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+
+    .badge.bg-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+    }
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .badge.bg-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    }
+
+/* Action Buttons */
+.orders-table .btn-sm {
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    padding: 0.4rem 1rem;
+}
+
+.orders-table .btn-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    border: none;
+}
+
+    .orders-table .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+    }
+
+    .orders-table .btn-info i {
+        margin-right: 0.3rem;
+    }
+
+/* Table Summary */
+.table-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+    .table-summary p {
+        margin: 0.3rem 0;
+        font-size: 1rem;
+        color: #495057;
+    }
+
+    .table-summary strong {
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .orders-page-header {
+        padding: 1.5rem;
+    }
+
+        .orders-page-header h2 {
+            font-size: 1.5rem;
+        }
+
+    .stats-card h4 {
+        font-size: 1.5rem;
+    }
+
+    .orders-table {
+        font-size: 0.85rem;
+    }
+
+        .orders-table .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .orders-table thead th {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .orders-table tbody td {
+            padding: 0.75rem 0.5rem;
+        }
+
+    .search-filter-card .row {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.orders-table-card,
+.stats-card,
+.search-filter-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+/* Hover Icon Effect */
+.orders-table .btn i {
+    transition: transform 0.3s ease;
+}
+
+.orders-table .btn:hover i {
+    transform: scale(1.2);
+}
+
+/* Empty State */
+.empty-orders {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+    .empty-orders i {
+        font-size: 4rem;
+        color: #4facfe;
+        margin-bottom: 1rem;
+    }
+
+/* Print Styles */
+@media print {
+    .search-filter-card,
+    .btn {
+        display: none !important;
+    }
+
+    .orders-table-card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}

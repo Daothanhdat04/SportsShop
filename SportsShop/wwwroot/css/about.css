@@ -1,0 +1,357 @@
+﻿/* =============================================
+   ABOUT PAGE STYLES
+   ============================================= */
+
+.about-page {
+    background: #f8f9fa;
+}
+
+/* Hero Section */
+.about-hero {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #fff;
+}
+
+.hero-content {
+    padding: 20px 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .hero-title i {
+        color: #ffa500;
+        font-size: 3.5rem;
+        animation: bounce 2s infinite;
+    }
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: #ffa500;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.hero-image img {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+    .hero-image img:hover {
+        transform: scale(1.05);
+    }
+
+/* Section Header */
+.section-header {
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #ffa500, #ff8c00);
+        border-radius: 2px;
+    }
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin: 20px 0 0;
+}
+
+/* Values Section */
+.about-values {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.value-card {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s;
+    border: 2px solid #f0f0f0;
+    height: 100%;
+}
+
+    .value-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(255, 165, 0, 0.2);
+        border-color: #ffa500;
+    }
+
+.value-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ffa500, #ff8c00);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    transition: all 0.3s;
+}
+
+.value-card:hover .value-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.value-icon i {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.value-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.value-text {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Statistics Section */
+.about-stats {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #fff;
+}
+
+.stat-card {
+    padding: 30px 20px;
+}
+
+.stat-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 165, 0, 0.2);
+    border: 3px solid #ffa500;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    transition: all 0.3s;
+}
+
+.stat-card:hover .stat-icon {
+    background: #ffa500;
+    transform: scale(1.15) rotate(360deg);
+}
+
+.stat-icon i {
+    font-size: 1.8rem;
+    color: #ffa500;
+    transition: color 0.3s;
+}
+
+.stat-card:hover .stat-icon i {
+    color: #fff;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ffa500;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* CTA Section */
+.about-cta {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.cta-box {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    padding: 60px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.cta-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.cta-text {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.btn-cta {
+    background: linear-gradient(135deg, #ffa500, #ff8c00);
+    color: #fff;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 30px;
+    border: none;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .btn-cta:hover {
+        background: linear-gradient(135deg, #ff8c00, #ff6b00);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 165, 0, 0.5);
+        color: #fff;
+    }
+
+    .btn-cta i {
+        margin-right: 10px;
+    }
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+        .hero-title i {
+            font-size: 2.5rem;
+        }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .about-hero {
+        padding: 60px 0;
+    }
+
+    .hero-image {
+        margin-top: 40px;
+    }
+
+    .cta-box {
+        padding: 40px;
+        text-align: center;
+    }
+
+    .cta-title {
+        font-size: 2rem;
+    }
+
+    .cta-text {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .btn-cta {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 2rem;
+        flex-direction: column;
+        text-align: center;
+    }
+
+        .hero-title i {
+            font-size: 2rem;
+        }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        text-align: center;
+    }
+
+    .about-hero,
+    .about-values,
+    .about-stats,
+    .about-cta {
+        padding: 50px 0;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .value-card {
+        padding: 30px 20px;
+        margin-bottom: 20px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .cta-box {
+        padding: 30px 20px;
+    }
+
+    .cta-title {
+        font-size: 1.75rem;
+    }
+
+    .cta-text {
+        font-size: 1rem;
+    }
+
+    .btn-cta {
+        width: 100%;
+        text-align: center;
+    }
+}

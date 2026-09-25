@@ -1,0 +1,80 @@
+﻿@model SportsShop.Models.Product
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+}
+
+<h2 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Xóa sản phẩm</h2>
+<hr />
+
+@if (ViewBag.HasActiveOrders)
+{
+    <!-- ❌ KHÔNG CHO XÓA -->
+    <div class="alert alert-danger">
+        <h4><i class="fas fa-ban"></i> Không thể xóa sản phẩm này!</h4>
+        <p>
+            Sản phẩm đang có <strong>@ViewBag.ActiveOrdersCount đơn hàng</strong> chưa hoàn thành
+            (Đang xử lý, Đã xác nhận, Đang giao hàng).
+        </p>
+        <p class="mb-0">
+            <i class="fas fa-info-circle"></i>
+            Bạn chỉ có thể xóa sản phẩm khi tất cả đơn hàng có sản phẩm này đã ở trạng thái "Đã giao" hoặc "Đã hủy".
+        </p>
+    </div>
+}
+else
+{
+    <!-- ✅ CHO PHÉP XÓA -->
+    <div class="alert alert-warning">
+        <h4>Bạn có chắc chắn muốn xóa sản phẩm này?</h4>
+        <p class="mb-0">Hành động này không thể hoàn tác!</p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" style="max-height: 300px; object-fit: cover; border-radius: 10px;">
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Tên sản phẩm:</dt>
+                    <dd class="col-sm-9"><strong>@Model.Name</strong></dd>
+
+                    <dt class="col-sm-3">Mô tả:</dt>
+                    <dd class="col-sm-9">@Model.Description</dd>
+
+                    <dt class="col-sm-3">Giá:</dt>
+                    <dd class="col-sm-9"><strong class="text-danger">@Model.Price.ToString("N0") ₫</strong></dd>
+
+                    <dt class="col-sm-3">Tồn kho:</dt>
+                    <dd class="col-sm-9">@Model.Stock</dd>
+
+                    <dt class="col-sm-3">Danh mục:</dt>
+                    <dd class="col-sm-9">@Model.Category?.Name</dd>
+                </dl>
+
+                @if (ViewBag.HasActiveOrders)
+                {
+                    <!-- ❌ KHÔNG HIỂN THỊ FORM XÓA -->
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                    </a>
+                }
+                else
+                {
+                    <!-- ✅ HIỂN THỊ FORM XÓA -->
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                            <i class="fas fa-trash"></i> Xác nhận xóa
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Hủy
+                        </a>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

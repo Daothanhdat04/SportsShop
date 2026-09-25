@@ -1,0 +1,543 @@
+﻿/* 🏃‍♂️ TRANG ĐĂNG KÝ - SPORTS THEME */
+
+/* Background với ảnh thể thao thực tế */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Ảnh thể thao từ unsplash - background khác với login để có sự khác biệt */
+    background: linear-gradient(rgba(255, 107, 107, 0.7), rgba(157, 78, 221, 0.7)), url('https://images.unsplash.com/photo-1517649763962-0c623066013b?w=1920') center/cover fixed;
+    position: relative;
+    overflow-x: hidden;
+}
+
+    /* Overlay gradient để làm nổi form */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+/* Container */
+.register-page {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+    /* ⭐ QUAN TRỌNG: Tăng chiều rộng của .row */
+    .register-page .row {
+        width: 100%;
+        max-width: none !important; /* Bỏ giới hạn của Bootstrap */
+    }
+
+    .register-page .col-md-6 {
+        max-width: 700px !important; /* ⭐ CHỖ NÀY - Tăng giảm độ rộng ở đây! */
+        flex: 0 0 900px;
+    }
+
+/* Fix cho landscape mode */
+@media (max-height: 700px) and (orientation: landscape) {
+    .register-page {
+        min-height: auto;
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Card - Frosted Glass Effect */
+.register-card {
+    width: 100%;
+    max-width: 750px; /* ⭐ TĂNG TỪ 550px LÊN 750px - Khung rộng hơn nhiều! */
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/* ⭐ LANDSCAPE MODE - RỘNG KHUNG RA */
+@media (max-height: 700px) and (orientation: landscape) {
+    .register-card {
+        max-width: 85vw; /* ← Đây là chỗ điều chỉnh độ rộng! Tăng/giảm con số này */
+        border-radius: 16px;
+    }
+}
+
+/* Animated top border - gradient khác với login */
+.register-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b6b, #9d4edd, #4d96ff, #6bcf7f, #ffd93d);
+    background-size: 200% 100%;
+    animation: gradientMove 3s linear infinite;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.register-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+/* Header với gradient thể thao - màu khác để phân biệt */
+.register-card .card-header {
+    background: linear-gradient(135deg, #ff6b6b 0%, #9d4edd 100%);
+    padding: 2.5rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Landscape: Thu gọn header */
+@media (max-height: 700px) and (orientation: landscape) {
+    .register-card .card-header {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+/* Icon thể thao phía sau */
+.register-card .card-header::before {
+    content: '⚽';
+    position: absolute;
+    font-size: 10rem;
+    opacity: 0.15;
+    top: -30px;
+    right: -30px;
+    transform: rotate(-20deg);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+}
+
+.register-card .card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+}
+
+.register-card .card-header h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Landscape: Font nhỏ hơn */
+@media (max-height: 700px) and (orientation: landscape) {
+    .register-card .card-header h3 {
+        font-size: 1.5rem;
+        gap: 0.5rem;
+    }
+}
+
+.register-card .card-header h3 i {
+    font-size: 1.75rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Card Body */
+.register-card .card-body {
+    padding: 2.5rem 2rem;
+    background: rgba(255, 255, 255, 0.98);
+}
+
+/* Landscape: Thu gọn padding và spacing */
+@media (max-height: 700px) and (orientation: landscape) {
+    .register-card .card-body {
+        padding: 1.5rem 1.75rem;
+    }
+}
+
+/* Form Labels */
+.form-label {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+/* Input Fields */
+.form-control {
+    border-radius: 12px;
+    border: 2px solid #e0e6ed;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-weight: 500;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #ff6b6b;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15), 0 8px 20px rgba(255, 107, 107, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .form-control::placeholder {
+        color: #a0aec0;
+        font-size: 0.9rem;
+        font-weight: 400;
+    }
+
+/* Textarea specific styling */
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Register Button - Bold Sports Style với màu khác */
+.register-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #9d4edd 100%);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 1.1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 100%;
+}
+
+    .register-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .register-btn:hover::before {
+        left: 100%;
+    }
+
+    .register-btn:hover {
+        background: linear-gradient(135deg, #9d4edd 0%, #ff6b6b 100%);
+        box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+        transform: translateY(-4px);
+    }
+
+    .register-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+    }
+
+    .register-btn i {
+        margin-right: 0.75rem;
+        font-size: 1.3rem;
+    }
+
+/* Divider */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #cbd5e0, transparent);
+    margin: 2rem 0;
+    opacity: 0.6;
+}
+
+/* Links */
+.text-center p {
+    color: #4a5568;
+    font-size: 1rem;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.link-login {
+    color: #ff6b6b;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    font-size: 1.05rem;
+}
+
+    .link-login::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ff6b6b, #9d4edd);
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .link-login:hover::after {
+        width: 100%;
+    }
+
+    .link-login:hover {
+        color: #9d4edd;
+    }
+
+/* Validation Messages */
+.text-danger {
+    font-size: 0.85rem;
+    color: #dc3545;
+    margin-top: 0.4rem;
+    display: block;
+    font-weight: 600;
+}
+
+.validation-summary-errors {
+    background: linear-gradient(135deg, #fff5f5, #ffe5e5);
+    border-left: 4px solid #dc3545;
+    padding: 1.25rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15);
+}
+
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .validation-summary-errors li {
+        color: #dc3545;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+/* Input Groups */
+.mb-3, .mb-4 {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+/* Landscape: Thu gọn spacing giữa các fields */
+@media (max-height: 700px) and (orientation: landscape) {
+    .mb-3, .mb-4 {
+        margin-bottom: 1rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-control {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    textarea.form-control {
+        min-height: 60px;
+    }
+
+    .register-btn {
+        padding: 0.9rem 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    hr {
+        margin: 1.25rem 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    body {
+        background-size: cover;
+        background-position: center;
+    }
+
+    .register-card {
+        max-width: 100%;
+        margin: 0 1rem;
+        border-radius: 20px;
+    }
+
+        .register-card .card-header {
+            padding: 2rem 1.5rem;
+        }
+
+            .register-card .card-header h3 {
+                font-size: 1.6rem;
+            }
+
+        .register-card .card-body {
+            padding: 2rem 1.5rem;
+        }
+
+    .register-btn {
+        font-size: 1.1rem;
+        padding: 1rem 1.5rem;
+        letter-spacing: 1px;
+    }
+
+    .form-control {
+        padding: 0.9rem 1rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .register-card {
+        margin: 0 0.5rem;
+    }
+
+        .register-card .card-header {
+            padding: 1.75rem 1rem;
+        }
+
+            .register-card .card-header h3 {
+                font-size: 1.4rem;
+            }
+
+        .register-card .card-body {
+            padding: 1.75rem 1rem;
+        }
+
+    .register-btn {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        padding: 0.85rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Smooth transitions */
+* {
+    transition-property: color, background-color, border-color, transform, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+}
+
+    /* Focus visible for accessibility */
+    *:focus-visible {
+        outline: 3px solid rgba(255, 107, 107, 0.5);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+
+/* Parallax effect khi scroll */
+@media (min-width: 768px) {
+    body {
+        background-attachment: fixed;
+    }
+}
+
+/* Loading state */
+.register-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+    .register-btn.loading::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        top: 50%;
+        right: 25px;
+        margin-top: -11px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Form spacing optimization for nhiều fields */
+.register-card .card-body form .mb-3:not(:last-child) {
+    margin-bottom: 1.25rem;
+}
+
+/* Adjust padding for better spacing with more fields */
+@media (min-width: 577px) and (max-width: 768px) {
+    .register-card .card-body {
+        padding: 2.25rem 1.75rem;
+    }
+
+    .mb-3, .mb-4 {
+        margin-bottom: 1.25rem;
+    }
+}
+
+/* Enhanced hover effects for inputs */
+.form-control:hover:not(:focus) {
+    border-color: #cbd5e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Grid gap adjustment */
+.d-grid {
+    display: grid;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}

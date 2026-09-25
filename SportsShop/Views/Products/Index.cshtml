@@ -1,0 +1,188 @@
+﻿@model SportsShop.ViewModels.ProductSearchViewModel
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+}
+<link rel="stylesheet" href="~/css/products-index.css" />
+<h2>Danh sách sản phẩm</h2>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>🔍 Tìm kiếm và lọc sản phẩm</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Index" method="get">
+                    <div class="row">
+                        <!-- Tìm kiếm -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Tìm kiếm</label>
+                            <input type="text" name="searchString" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Nhập tên sản phẩm..." />
+                        </div>
+
+                        <!-- Danh mục -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Danh mục</label>
+                            <select name="categoryId" class="form-select">
+                                <option value="">-- Tất cả --</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category.Id" selected="@(ViewBag.CurrentCategory == category.Id)">
+                                        @category.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Giá từ -->
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Giá từ</label>
+                            <input type="number" name="minPrice" value="@ViewBag.CurrentMinPrice" class="form-control" placeholder="0" />
+                        </div>
+
+                        <!-- Giá đến -->
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Giá đến</label>
+                            <input type="number" name="maxPrice" value="@ViewBag.CurrentMaxPrice" class="form-control" placeholder="10000000" />
+                        </div>
+
+                        <!-- Nút tìm kiếm -->
+                        <div class="col-md-1 mb-3">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-success w-100">Lọc</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Sắp xếp -->
+                        <div class="col-md-3">
+                            <label class="form-label">Sắp xếp theo</label>
+                            <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                                <option value="">-- Mặc định --</option>
+                                <option value="name_asc" selected="@(ViewBag.CurrentSort == "name_asc")">Tên A-Z</option>
+                                <option value="name_desc" selected="@(ViewBag.CurrentSort == "name_desc")">Tên Z-A</option>
+                                <option value="price_asc" selected="@(ViewBag.CurrentSort == "price_asc")">Giá thấp đến cao</option>
+                                <option value="price_desc" selected="@(ViewBag.CurrentSort == "price_desc")">Giá cao đến thấp</option>
+                                <option value="newest" selected="@(ViewBag.CurrentSort == "newest")">Mới nhất</option>
+                            </select>
+                        </div>
+
+                        <!-- Nút reset -->
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <a asp-action="Index" class="btn btn-secondary w-100">🔄 Làm mới</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Kết quả -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <p class="text-muted">
+            Hiển thị <strong>@Model.Products.Count</strong> / <strong>@Model.Products.TotalItemCount</strong> sản phẩm
+        </p>
+    </div>
+</div>
+
+@if (!Model.Products.Any())
+{
+    <div class="alert alert-warning">
+        <h4>⚠️ Không tìm thấy sản phẩm nào!</h4>
+        <p>Vui lòng thử lại với các tiêu chí tìm kiếm khác.</p>
+    </div>
+}
+else
+{
+    <!-- Danh sách sản phẩm dạng card -->
+    <div class="row">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+<img src="@item.PrimaryImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title">@item.Name</h6>
+                        <p class="card-text text-muted">@item.Description</p>
+                        <div class="mt-auto">
+                            <p class="card-text">
+                                @if (item.IsOnDiscount)
+                                {
+                                    <span class="text-decoration-line-through text-muted">@item.Price.ToString("N0") ₫</span>
+                        
+                                    <br />
+                                    <strong class="text-danger fs-5">@item.DisplayPrice.ToString("N0") ₫</strong>
+                                    <span class="badge bg-danger ms-2">-@item.DiscountPercent%</span>
+                                }
+                                else
+                                {
+                                    <strong class="text-danger fs-5">@item.Price.ToString("N0") ₫</strong>
+                                }
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    📦 Danh mục: @item.Category?.Name<br />
+                                    📊 Còn lại: @item.Stock
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Chi tiết</a>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.Id" class="btn btn-sm btn-success">
+                                Thêm giỏ
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Index", "Products")" class="btn btn-sm btn-warning">
+                                Đăng nhập để mua
+                            </a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Phân trang -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <nav aria-label="Page navigation">
+                @Html.PagedListPager(Model.Products, page => Url.Action("Index", new
+                {
+                    page,
+                        searchString = ViewBag.CurrentSearch,
+                        categoryId = ViewBag.CurrentCategory,
+                        minPrice = ViewBag.CurrentMinPrice,
+                        maxPrice = ViewBag.CurrentMaxPrice,
+                        sortOrder = ViewBag.CurrentSort
+                        }), new PagedListRenderOptions
+                {
+                    LiElementClasses = new[] { "page-item" },
+                    PageClasses = new[] { "page-link" },
+                    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                    LinkToFirstPageFormat = "«",
+                    LinkToPreviousPageFormat = "‹",
+                    LinkToNextPageFormat = "›",
+                    LinkToLastPageFormat = "»",
+                    MaximumPageNumbersToDisplay = 5,
+                    UlElementClasses = new[] { "pagination", "justify-content-center" }
+                })
+        </nav>
+    </div>
+</div>
+}

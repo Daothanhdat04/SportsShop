@@ -1,0 +1,86 @@
+﻿@model IEnumerable<SportsShop.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<h2>Quản lý đơn hàng</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="mb-3">
+    <button class="btn btn-primary" onclick="filterOrders('all')">Tất cả (@Model.Count())</button>
+    <button class="btn btn-warning" onclick="filterOrders('Đang xử lý')">Đang xử lý (@Model.Count(o => o.Status == "Đang xử lý"))</button>
+    <button class="btn btn-info" onclick="filterOrders('Đã xác nhận')">Đã xác nhận (@Model.Count(o => o.Status == "Đã xác nhận"))</button>
+    <button class="btn btn-success" onclick="filterOrders('Đã giao')">Đã giao (@Model.Count(o => o.Status == "Đã giao"))</button>
+    <button class="btn btn-danger" onclick="filterOrders('Đã hủy')">Đã hủy (@Model.Count(o => o.Status == "Đã hủy"))</button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã ĐH</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr data-status="@order.Status">
+                <td><strong>#@order.Id</strong></td>
+                <td>
+                    @order.CustomerName<br />
+                    <small class="text-muted">@order.CustomerPhone</small>
+                </td>
+                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td><strong>@order.TotalAmount.ToString("N0") ₫</strong></td>
+                <td>
+                    @if (order.Status == "Đang xử lý")
+                    {
+                        <span class="badge bg-warning">@order.Status</span>
+                    }
+                    else if (order.Status == "Đã xác nhận")
+                    {
+                        <span class="badge bg-info">@order.Status</span>
+                    }
+                    else if (order.Status == "Đã giao")
+                    {
+                        <span class="badge bg-success">@order.Status</span>
+                    }
+                    else if (order.Status == "Đã hủy")
+                    {
+                        <span class="badge bg-danger">@order.Status</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function filterOrders(status) {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+}

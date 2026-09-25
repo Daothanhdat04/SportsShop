@@ -1,0 +1,642 @@
+﻿@model SportsShop.Models.Product
+@inject Microsoft.AspNetCore.Identity.SignInManager<SportsShop.Models.ApplicationUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<SportsShop.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/product-details.css" />
+
+<div class="product-details-container">
+    <!-- HEADER -->
+    <div class="product-header">
+        <h2><i class="fas fa-box-open"></i> Chi tiết sản phẩm</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- GALLERY IMAGES -->
+        <div class="col-lg-6">
+            <div class="gallery-section">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    <!-- Ảnh chính -->
+                    <div class="main-image-wrapper">
+                        @{
+                            var mainImage = Model.Images.FirstOrDefault(i => i.IsPrimary) 
+                                            ?? Model.Images.OrderBy(i => i.DisplayOrder).First();
+                        }
+                        <img src="@mainImage.ImageUrl" 
+                             id="mainImage" 
+                             alt="@Model.Name" 
+                             onclick="openImageModal('@mainImage.ImageUrl')" />
+                    </div>
+
+                    <!-- Thumbnails -->
+                    @if (Model.Images.Count > 1)
+                    {
+                        <div class="thumbnails-wrapper">
+                            @foreach (var image in Model.Images.OrderBy(i => i.DisplayOrder))
+                            {
+                                <div class="thumbnail-item">
+                                    <img src="@image.ImageUrl" 
+                                         class="@(image.Id == mainImage.Id ? "active" : "")" 
+                                         alt="Thumbnail" 
+                                         onclick="changeMainImage('@image.ImageUrl', this)" />
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <!-- Ảnh mặc định -->
+                    <div class="main-image-wrapper">
+                        <img src="@(Model.ImageUrl ?? "/images/no-image.jpg")" 
+                             id="mainImage"
+                             alt="@Model.Name" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- THÔNG TIN SẢN PHẨM -->
+        <div class="col-lg-6">
+            <div class="product-info-section">
+                <h3 class="product-title">@Model.Name</h3>
+                
+                @if (Model.IsOnDiscount)
+                {
+                    <div class="discount-badge">
+                        <i class="fas fa-fire"></i> GIẢM GIÁ @Model.DiscountPercent%
+                    </div>
+                }
+                
+                <div class="product-details">
+                    <!-- Mô tả -->
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="fas fa-align-left"></i> Mô tả
+                        </div>
+                        <div class="detail-value">@Model.Description</div>
+                    </div>
+
+                    <!-- Giá -->
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="fas fa-tag"></i> Giá
+                        </div>
+                        <div class="detail-value">
+                            <div class="price-wrapper">
+                                @if (Model.IsOnDiscount)
+                                {
+                                    <span class="original-price">@Model.Price.ToString("N0") ₫</span>
+                                    <span class="current-price">@Model.DisplayPrice.ToString("N0") ₫</span>
+                                    <span class="save-badge">
+                                        Tiết kiệm: @((Model.Price - Model.DisplayPrice).ToString("N0")) ₫
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="current-price">@Model.Price.ToString("N0") ₫</span>
+                                }
+                            </div>
+                            @if (Model.IsOnDiscount && Model.DiscountEndDate.HasValue)
+                            {
+                                <div class="discount-expiry">
+                                    <i class="fas fa-clock"></i> Hết hạn: @Model.DiscountEndDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Danh mục -->
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="fas fa-folder"></i> Danh mục
+                        </div>
+                        <div class="detail-value">@Model.Category?.Name</div>
+                    </div>
+
+                    <!-- Tồn kho -->
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="fas fa-warehouse"></i> Tồn kho
+                        </div>
+                        <div class="detail-value">
+                            @if (Model.Stock > 0)
+                            {
+                                <span class="stock-badge in-stock">
+                                    <i class="fas fa-check-circle"></i> Còn @Model.Stock sản phẩm
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="stock-badge out-of-stock">
+                                    <i class="fas fa-times-circle"></i> Hết hàng
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM THÊM VÀO GIỎ HÀNG -->
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.HasVariants && Model.Variants != null && Model.Variants.Any())
+                    {
+                        <form asp-controller="Cart" asp-action="AddToCartWithVariant" method="post" class="variant-form">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-palette"></i> Chọn màu sắc <span class="text-danger">*</span>
+                                </label>
+                                <select name="color" class="form-select" id="colorSelect" required>
+                                    <option value="">-- Chọn màu --</option>
+                                    @foreach (var color in Model.Variants.Select(v => v.Color).Distinct())
+                                    {
+                                        <option value="@color">@color</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-ruler"></i> Chọn size <span class="text-danger">*</span>
+                                </label>
+                                <select name="size" class="form-select" id="sizeSelect" required>
+                                    <option value="">-- Chọn size --</option>
+                                    @foreach (var size in Model.Variants.Select(v => v.Size).Distinct())
+                                    {
+                                        <option value="@size">@size</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-calculator"></i> Số lượng
+                                </label>
+                                <input type="number" name="quantity" class="form-control quantity-input" value="1" min="1" max="10" />
+                            </div>
+
+                            @if (Model.Stock > 0)
+                            {
+                                <button type="submit" class="btn-add-to-cart">
+                                    <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn-add-to-cart btn-disabled" disabled>
+                                    <i class="fas fa-ban"></i> Hết hàng
+                                </button>
+                            }
+                        </form>
+
+                        <!-- Bảng tồn kho biến thể -->
+                        <div class="variant-stock-table">
+                            <h5><i class="fas fa-clipboard-list"></i> Tình trạng kho</h5>
+                            <table class="variant-table">
+                                <thead>
+                                    <tr>
+                                        <th>Màu</th>
+                                        <th>Size</th>
+                                        <th>Giá</th>
+                                        <th>Còn lại</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var variant in Model.Variants)
+                                    {
+                                        <tr>
+                                            <td><strong>@variant.Color</strong></td>
+                                            <td>@variant.Size</td>
+                                            <td>
+                                                @if (variant.HasDiscount)
+                                                {
+                                                    <span class="original-price" style="font-size: 0.9rem;">@Model.Price.ToString("N0") ₫</span><br />
+                                                    <strong style="color: #e53e3e; font-size: 1.1rem;">@variant.DiscountPrice.Value.ToString("N0") ₫</strong>
+                                                    <span class="save-badge" style="font-size: 0.75rem;">-@variant.DiscountPercent%</span>
+                                                }
+                                                else if (Model.IsOnDiscount)
+                                                {
+                                                    <span class="original-price" style="font-size: 0.9rem;">@Model.Price.ToString("N0") ₫</span><br />
+                                                    <strong style="color: #e53e3e; font-size: 1.1rem;">@Model.DisplayPrice.ToString("N0") ₫</strong>
+                                                }
+                                                else
+                                                {
+                                                    <strong>@Model.Price.ToString("N0") ₫</strong>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (variant.Stock > 0)
+                                                {
+                                                    <span class="stock-badge in-stock">@variant.Stock</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="stock-badge out-of-stock">Hết</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-controller="Cart" asp-action="AddToCart" method="get" class="variant-form">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-calculator"></i> Số lượng
+                                </label>
+                                <input type="number" name="quantity" class="form-control quantity-input" value="1" min="1" max="@Model.Stock" />
+                            </div>
+                            
+                            @if (Model.Stock > 0)
+                            {
+                                <button type="submit" class="btn-add-to-cart">
+                                    <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn-add-to-cart btn-disabled" disabled>
+                                    <i class="fas fa-ban"></i> Hết hàng
+                                </button>
+                            }
+                        </form>
+                    }
+                }
+                else
+                {
+                    <div class="login-alert">
+                        <h5><i class="fas fa-lock"></i> Bạn cần đăng nhập để mua hàng</h5>
+                        <p>Vui lòng đăng nhập hoặc đăng ký tài khoản để thêm sản phẩm vào giỏ hàng.</p>
+                        <div>
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Details", "Products", new { id = Model.Id })" class="btn-login">
+                                <i class="fas fa-sign-in-alt"></i> Đăng nhập ngay
+                            </a>
+                            <a asp-controller="Account" asp-action="Register" class="btn-register">
+                                <i class="fas fa-user-plus"></i> Đăng ký tài khoản
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem ảnh full size -->
+    <div class="modal fade image-modal" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Model.Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Full size image" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="reviews-section">
+        <div class="reviews-header">
+            <h4><i class="fas fa-star"></i> Đánh giá sản phẩm</h4>
+        </div>
+        <div class="reviews-body">
+            <!-- Rating Overview -->
+            <div class="rating-overview">
+                <!-- Rating Summary -->
+                <div class="rating-summary">
+                    <div class="rating-number">@Model.AverageRating.ToString("0.0")</div>
+                    <div class="rating-stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Round(Model.AverageRating))
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        }
+                    </div>
+                    <p class="rating-count">@Model.TotalReviews đánh giá</p>
+                </div>
+
+                <!-- Rating Breakdown -->
+                <div class="rating-breakdown">
+                    @{
+                        var ratingCounts = Model.RatingCounts;
+                        var totalReviews = Model.TotalReviews > 0 ? Model.TotalReviews : 1;
+                    }
+                    @for (int star = 5; star >= 1; star--)
+                    {
+                        var count = ratingCounts[star];
+                        var percentage = (count * 100.0 / totalReviews);
+                        
+                        <div class="rating-bar-row">
+                            <span class="rating-bar-label">@star <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-container">
+                                <div class="rating-bar-fill" style="width: @percentage%"></div>
+                            </div>
+                            <span class="rating-bar-count">@count</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Rating Action -->
+                <div class="rating-action">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var currentUserId = UserManager.GetUserId(User);
+                        var userReview = Model.Reviews?.FirstOrDefault(r => r.UserId == currentUserId);
+
+                        if (userReview == null)
+                        {
+                            <button type="button" class="btn-add-to-cart" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                <i class="fas fa-edit"></i> Viết đánh giá
+                            </button>
+                        }
+                        else
+                        {
+                            <div style="background: #e6fffa; color: #234e52; padding: 15px; border-radius: 12px; font-weight: 600;">
+                                <i class="fas fa-check-circle"></i> Bạn đã đánh giá
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Details", "Products", new { id = Model.Id })" class="btn-add-to-cart">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập để đánh giá
+                        </a>
+                    }
+                </div>
+            </div>
+
+            <hr style="margin: 40px 0; border-color: #e2e8f0;" />
+
+            <!-- Reviews List -->
+            <div class="reviews-list">
+                <h5><i class="fas fa-comments"></i> Đánh giá từ khách hàng</h5>
+
+                @if (Model.Reviews == null || !Model.Reviews.Any(r => r.IsApproved))
+                {
+                    <div class="empty-reviews">
+                        <i class="fas fa-comment-slash"></i>
+                        <p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá sản phẩm này!</p>
+                    </div>
+                }
+                else
+                {
+                    foreach (var review in Model.Reviews.Where(r => r.IsApproved).OrderByDescending(r => r.CreatedDate))
+                    {
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div>
+                                    <div class="review-author">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>@review.User?.FullName</span>
+                                        @if (review.IsVerifiedPurchase)
+                                        {
+                                            <span class="verified-badge">
+                                                <i class="fas fa-check"></i> Đã mua hàng
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="review-stars">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        }
+                                        <span class="review-date">@review.CreatedDate.ToString("dd/MM/yyyy HH:mm")</span>
+                                    </div>
+                                </div>
+
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    var currentUserId = UserManager.GetUserId(User);
+                                    if (review.UserId == currentUserId)
+                                    {
+                                        <div class="review-actions dropdown">
+                                            <button class="review-menu-btn" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <button type="button" class="dropdown-item" onclick="editReview(@review.Id, @review.Rating, '@(review.Comment?.Replace("'", "\\'")?.Replace("\n", "\\n"))')">
+                                                        <i class="fas fa-edit"></i> Sửa
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <form asp-controller="Reviews" asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Xóa đánh giá này?')">
+                                                        <input type="hidden" name="id" value="@review.Id" />
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="fas fa-trash"></i> Xóa
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(review.Comment))
+                            {
+                                <div class="review-content">@review.Comment</div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Write Review -->
+    <div class="modal fade review-modal" id="reviewModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-star"></i> Viết đánh giá
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form asp-controller="Reviews" asp-action="Create" method="post" id="reviewForm">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="reviewId" id="reviewId" value="0" />
+                    <input type="hidden" name="rating" id="ratingValue" required />
+                    
+                    <div class="modal-body">
+                        <div class="star-rating-container">
+                            <label>Đánh giá của bạn <span class="text-danger">*</span></label>
+                            <div id="starRating">
+                                <span class="star-icon" data-value="1">☆</span>
+                                <span class="star-icon" data-value="2">☆</span>
+                                <span class="star-icon" data-value="3">☆</span>
+                                <span class="star-icon" data-value="4">☆</span>
+                                <span class="star-icon" data-value="5">☆</span>
+                            </div>
+                            <div class="star-hint">Click vào sao để đánh giá</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-comment"></i> Nhận xét</label>
+                            <textarea name="comment" 
+                                      id="reviewComment"
+                                      class="comment-textarea" 
+                                      rows="4" 
+                                      maxlength="500"
+                                      placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."></textarea>
+                            <div class="char-count">Tối đa 500 ký tự</div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn-submit-review">
+                            <i class="fas fa-paper-plane"></i> Gửi đánh giá
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a asp-action="Index" class="back-button">
+        <i class="fas fa-arrow-left"></i> Quay lại danh sách
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        // Đổi ảnh chính khi click thumbnail
+        function changeMainImage(imageUrl, thumbnail) {
+            const mainImg = document.getElementById('mainImage');
+            mainImg.src = imageUrl;
+            
+            // Remove active class from all thumbnails
+            document.querySelectorAll('.thumbnail-item img').forEach(img => {
+                img.classList.remove('active');
+            });
+            
+            // Add active class to clicked thumbnail
+            thumbnail.classList.add('active');
+        }
+
+        // Mở modal xem ảnh full size
+        function openImageModal(imageUrl) {
+            document.getElementById('modalImage').src = imageUrl;
+            new bootstrap.Modal(document.getElementById('imageModal')).show();
+        }
+
+        // ===== STAR RATING SYSTEM =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const starContainer = document.getElementById('starRating');
+            const ratingInput = document.getElementById('ratingValue');
+            const stars = document.querySelectorAll('.star-icon');
+
+            if (starContainer && stars.length > 0) {
+                stars.forEach(function(star) {
+                    // Click event
+                    star.addEventListener('click', function() {
+                        const value = parseInt(this.getAttribute('data-value'));
+                        ratingInput.value = value;
+                        updateStars(value);
+                    });
+
+                    // Hover event
+                    star.addEventListener('mouseenter', function() {
+                        const value = parseInt(this.getAttribute('data-value'));
+                        highlightStars(value);
+                    });
+                });
+
+                // Reset on mouse leave
+                starContainer.addEventListener('mouseleave', function() {
+                    const currentValue = parseInt(ratingInput.value) || 0;
+                    updateStars(currentValue);
+                });
+            }
+
+            function updateStars(rating) {
+                stars.forEach(function(star, index) {
+                    if (index < rating) {
+                        star.textContent = '★';
+                        star.classList.add('active');
+                    } else {
+                        star.textContent = '☆';
+                        star.classList.remove('active');
+                    }
+                });
+            }
+
+            function highlightStars(rating) {
+                stars.forEach(function(star, index) {
+                    if (index < rating) {
+                        star.textContent = '★';
+                        star.classList.add('active');
+                    } else {
+                        star.textContent = '☆';
+                        star.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        // Edit review
+        function editReview(id, rating, comment) {
+            document.getElementById('reviewId').value = id;
+            document.getElementById('reviewForm').action = '/Reviews/Edit';
+            document.getElementById('ratingValue').value = rating;
+            
+            // Update stars
+            const stars = document.querySelectorAll('.star-icon');
+            stars.forEach(function(star, index) {
+                if (index < rating) {
+                    star.textContent = '★';
+                    star.classList.add('active');
+                } else {
+                    star.textContent = '☆';
+                    star.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('reviewComment').value = comment || '';
+            new bootstrap.Modal(document.getElementById('reviewModal')).show();
+        }
+
+        // Reset form khi đóng modal
+        document.getElementById('reviewModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('reviewForm').action = '/Reviews/Create';
+            document.getElementById('reviewId').value = '0';
+            document.getElementById('ratingValue').value = '';
+            document.getElementById('reviewComment').value = '';
+            
+            // Reset stars
+            const stars = document.querySelectorAll('.star-icon');
+            stars.forEach(function(star) {
+                star.textContent = '☆';
+                star.classList.remove('active');
+            });
+        });
+    </script>
+}

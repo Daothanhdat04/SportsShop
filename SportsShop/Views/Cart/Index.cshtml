@@ -1,0 +1,156 @@
+﻿@model List<SportsShop.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/cart.css" />
+
+<div class="cart-container">
+    <div class="container">
+        <h2 class="cart-page-title">
+            <i class="fas fa-shopping-cart"></i>Giỏ hàng của bạn
+        </h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info">
+                <h4><i class="fas fa-shopping-basket empty-cart-icon"></i>Giỏ hàng trống!</h4>
+                <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.</p>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i> Tiếp tục mua hàng
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="cart-table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td data-label="Hình ảnh">
+                                    <img src="@item.ImageUrl" alt="@item.ProductName" class="cart-product-image">
+                                </td>
+                                <td data-label="Sản phẩm">
+                                    <span class="cart-product-name">@item.ProductName</span>
+                                    <div class="product-attributes">
+                                        @if (!string.IsNullOrEmpty(item.Size) || !string.IsNullOrEmpty(item.Color))
+                                        {
+                                            @if (!string.IsNullOrEmpty(item.Size))
+                                            {
+                                                <span class="badge bg-secondary">
+                                                    <i class="fas fa-ruler"></i> Size: @item.Size
+                                                </span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.Color))
+                                            {
+                                                <span class="badge bg-info">
+                                                    <i class="fas fa-palette"></i> Màu: @item.Color
+                                                </span>
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td data-label="Giá">
+                                    <span class="cart-price">@item.Price.ToString("N0") VNĐ</span>
+                                    @if (item.Price < 1000000)
+                                    {
+                                        <br />
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-tag"></i> Đã giảm giá
+                                        </span>
+                                    }
+                                </td>
+                                <td data-label="Số lượng">
+                                    <form asp-action="UpdateQuantity" method="post" class="quantity-form">
+                                        <input type="hidden" name="id" value="@item.ProductId" />
+                                        <input type="number" name="quantity" value="@item.Quantity" min="1" class="quantity-input" />
+                                        <button type="submit" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-sync-alt"></i> Cập nhật
+                                        </button>
+                                    </form>
+                                </td>
+                                <td data-label="Tổng tiền">
+                                    <span class="cart-total-price">@item.TotalPrice.ToString("N0") VNĐ</span>
+                                </td>
+                                <td data-label="Thao tác">
+                                    <a asp-action="RemoveFromCart" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end">
+                                <strong><i class="fas fa-calculator"></i> Tổng cộng:</strong>
+                            </td>
+                            <td colspan="2">
+                                <strong class="cart-total-price">@ViewBag.Total.ToString("N0") VNĐ</strong>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="cart-actions">
+                <div class="cart-actions-left">
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
+                    </a>
+                    <a asp-action="ClearCart" class="btn btn-warning" onclick="return confirm('Xóa toàn bộ giỏ hàng?')">
+                        <i class="fas fa-trash"></i> Xóa giỏ hàng
+                    </a>
+                </div>
+                <div class="cart-actions-right">
+                    <a asp-controller="Checkout" asp-action="Index" class="btn btn-success btn-checkout">
+                        <i class="fas fa-credit-card"></i> Thanh toán
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cart Summary Card (Optional - for better UX) -->
+            <div class="cart-summary">
+                <div class="cart-summary-item">
+                    <span class="cart-summary-label"><i class="fas fa-box"></i> Tổng số sản phẩm:</span>
+                    <span class="cart-summary-value">@Model.Count sản phẩm</span>
+                </div>
+                <div class="cart-summary-item">
+                    <span class="cart-summary-label"><i class="fas fa-cubes"></i> Tổng số lượng:</span>
+                    <span class="cart-summary-value">@Model.Sum(x => x.Quantity) món</span>
+                </div>
+                <div class="cart-summary-item">
+                    <span class="cart-summary-label"><i class="fas fa-money-bill-wave"></i> Tổng thanh toán:</span>
+                    <span class="cart-summary-value">@ViewBag.Total.ToString("N0") VNĐ</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

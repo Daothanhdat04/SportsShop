@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SportsShop</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SportsShop.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+</head>
+
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="top-bar-left">
+                        <span><i class="fas fa-phone-alt"></i> Hotline: 0123 456 789</span>
+                        <span class="ms-3"><i class="fas fa-envelope"></i> support@sportsshop.vn</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="top-bar-right">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand brand-logo" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-basketball"></i>
+                    <span class="brand-text">SportsShop</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between align-items-center">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house"></i> Trang chủ
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                                <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng
+                            </a>
+                        </li>
+                        <!-- NÚT MỚI: Về chúng tôi -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                                <i class="fa-solid fa-circle-info"></i> Về chúng tôi
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Search Form -->
+                    <form class="search-form d-flex" asp-controller="Home" asp-action="Search" method="get">
+                        <div class="search-wrapper">
+                            <input class="form-control search-input" type="search" name="q"
+                                   placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                            <button class="btn search-btn" type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- User Menu -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav ms-3">
+                            <li class="nav-item dropdown user-dropdown">
+                                <a class="nav-link dropdown-toggle user-menu" href="#" id="navbarDropdown"
+                                   role="button" data-bs-toggle="dropdown">
+                                    <div class="user-avatar">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <span class="user-name">@User.Identity.Name</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                            <i class="fa-solid fa-id-card"></i> Thông tin cá nhân
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="MyOrders">
+                                            <i class="fa-solid fa-box"></i> Đơn hàng của tôi
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            <button type="submit" class="dropdown-item logout-btn">
+                                                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav ms-3 auth-nav">
+                            <li class="nav-item">
+                                <a class="nav-link btn-login" asp-controller="Account" asp-action="Login">
+                                    <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn-register" asp-controller="Account" asp-action="Register">
+                                    <i class="fa-solid fa-user-plus"></i> Đăng ký
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+ @*    <main class="main-content">
+        @RenderBody()
+    </main> *@
+
+    <div class="main-content">
+        <main role="main" class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <!-- About Column -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-widget">
+                            <h4 class="footer-title">
+                                <i class="fa-solid fa-basketball"></i> SportsShop
+                            </h4>
+                            <p class="footer-text">
+                                Chuyên cung cấp các sản phẩm thể thao chất lượng cao với giá cả hợp lý.
+                                Cam kết mang đến trải nghiệm mua sắm tốt nhất cho khách hàng.
+                            </p>
+                            <div class="footer-social">
+                                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Liên Kết Nhanh</h5>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Giới thiệu</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Sản phẩm</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Khuyến mãi</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Tin tức</a></li>
+                                <li><a asp-controller="Home" asp-action="Privacy"><i class="fas fa-angle-right"></i> Chính sách bảo mật</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Customer Service -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Hỗ Trợ Khách Hàng</h5>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Hướng dẫn mua hàng</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Chính sách đổi trả</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Phương thức thanh toán</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Vận chuyển & Giao hàng</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> Câu hỏi thường gặp</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-widget">
+                            <h5 class="widget-title">Thông Tin Liên Hệ</h5>
+                            <ul class="footer-contact">
+                                <li>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>123 Đường ABC, Quận 1, TP.HCM</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-phone-alt"></i>
+                                    <span>0123 456 789</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-envelope"></i>
+                                    <span>support@sportsshop.vn</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-clock"></i>
+                                    <span>T2-T6: 8:00 - 20:00<br>T7-CN: 9:00 - 18:00</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="copyright-text">
+                            &copy; 2025 <strong>SportsShop</strong>. All rights reserved.
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="payment-methods">
+                            <span>Phương thức thanh toán:</span>
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Back to Top Script -->
+    <script>
+        // Back to Top Button
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+    <!-- Tawk.to Live Chat -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68ef725693054c1950e56113/1j7jld95f';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+</body>
+</html>

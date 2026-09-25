@@ -1,0 +1,246 @@
+﻿@model SportsShop.Models.Order
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/checkout.css" />
+
+<div class="checkout-container">
+    <div class="container">
+        <h2 class="checkout-page-title">
+            <i class="fas fa-shopping-cart"></i>Thanh toán đơn hàng
+        </h2>
+
+        <!-- Progress Steps -->
+        <div class="checkout-progress">
+            <div class="progress-step completed">
+                <div class="step-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="step-label">Giỏ hàng</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="progress-step active">
+                <div class="step-circle">2</div>
+                <span class="step-label">Thông tin</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <span class="step-label">Hoàn tất</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Customer Information Form -->
+            <div class="col-lg-7">
+                <div class="checkout-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-user-circle"></i>
+                        Thông tin khách hàng
+                    </h4>
+
+                    <form asp-action="PlaceOrder" method="post">
+                        <div class="mb-4">
+                            <label asp-for="CustomerName" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Họ và tên
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="CustomerName" class="form-control" placeholder="Nhập họ và tên đầy đủ" required />
+                            <span asp-validation-for="CustomerName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="CustomerEmail" class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="CustomerEmail" type="email" class="form-control" placeholder="example@email.com" required />
+                            <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="CustomerPhone" class="form-label">
+                                <i class="fas fa-phone"></i>
+                                Số điện thoại
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="CustomerPhone" class="form-control" placeholder="0xxxxxxxxx" required />
+                            <span asp-validation-for="CustomerPhone" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ShippingAddress" class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Địa chỉ giao hàng
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="ShippingAddress" class="form-control" rows="3"
+                                      placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" required></textarea>
+                            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="payment-methods-section">
+                            <h5 class="payment-method-title">
+                                <i class="fas fa-credit-card"></i>
+                                Phương thức thanh toán
+                            </h5>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cod" value="cod" checked>
+                                <label class="form-check-label" for="cod">
+                                    <div class="payment-option">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <div>
+                                            <strong>Thanh toán khi nhận hàng (COD)</strong>
+                                            <span class="payment-description">Thanh toán bằng tiền mặt khi nhận hàng</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="bank" value="bank">
+                                <label class="form-check-label" for="bank">
+                                    <div class="payment-option">
+                                        <i class="fas fa-university"></i>
+                                        <div>
+                                            <strong>Chuyển khoản ngân hàng</strong>
+                                            <span class="payment-description">Chuyển khoản qua tài khoản ngân hàng</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Security Badge -->
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Thông tin của bạn được bảo mật và mã hóa</span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="checkout-actions">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check-circle"></i>
+                                Xác nhận đặt hàng
+                            </button>
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i>
+                                Quay lại giỏ hàng
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="order-summary-card">
+                    <div class="order-summary-header">
+                        <h5>
+                            <i class="fas fa-receipt"></i>
+                            Đơn hàng của bạn
+                        </h5>
+                    </div>
+                    <div class="order-summary-body">
+                        @foreach (var item in ViewBag.CartItems)
+                        {
+                            <div class="order-item">
+                                <div class="item-details">
+                                    <div class="item-name">@item.ProductName</div>
+                                    @if (!string.IsNullOrEmpty(item.Size) || !string.IsNullOrEmpty(item.Color))
+                                    {
+                                        <div class="item-attributes">
+                                            @if (!string.IsNullOrEmpty(item.Size))
+                                            {
+                                                <span class="badge bg-secondary">
+                                                    <i class="fas fa-ruler"></i> @item.Size
+                                                </span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.Color))
+                                            {
+                                                <span class="badge bg-info">
+                                                    <i class="fas fa-palette"></i> @item.Color
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                    <div class="item-quantity">
+                                        <i class="fas fa-cube"></i>
+                                        Số lượng: <strong>@item.Quantity</strong>
+                                    </div>
+                                </div>
+                                <div class="item-price">
+                                    @item.TotalPrice.ToString("N0") ₫
+                                </div>
+                            </div>
+                        }
+
+                        <div class="order-total">
+                            <h5>
+                                <i class="fas fa-calculator"></i>
+                                Tổng cộng:
+                            </h5>
+                            <div class="total-amount">
+                                @ViewBag.Total.ToString("N0") ₫
+                            </div>
+                        </div>
+
+                        <div class="order-notice alert-info">
+                            <small>
+                                <i class="fas fa-info-circle"></i>
+                                <span>
+                                    <strong>Lưu ý:</strong> Phí vận chuyển sẽ được tính khi giao hàng.
+                                    Bạn sẽ nhận được email xác nhận đơn hàng sau khi đặt hàng thành công.
+                                </span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay (optional) -->
+<div class="checkout-loading" id="checkoutLoading">
+    <div class="spinner"></div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Show loading when form is submitted
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('checkoutLoading').classList.add('show');
+        });
+
+        // Payment method selection animation
+        document.querySelectorAll('.form-check-input').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.payment-option').forEach(function(option) {
+                    option.style.borderColor = '#e2e8f0';
+                    option.style.background = '#f8f9fa';
+                });
+
+                if(this.checked) {
+                    const option = this.nextElementSibling.querySelector('.payment-option');
+                    option.style.borderColor = '#ffa500';
+                    option.style.background = 'rgba(255, 165, 0, 0.05)';
+                }
+            });
+        });
+    </script>
+}
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

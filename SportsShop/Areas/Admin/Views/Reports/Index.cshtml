@@ -1,0 +1,348 @@
+﻿@{
+    ViewData["Title"] = "Thống kê báo cáo";
+}
+
+<!-- Link CSS -->
+<link rel="stylesheet" href="~/css/AdminReports.css" />
+
+<!-- Page Header -->
+<div class="reports-page-header">
+    <h2><i class="fas fa-chart-bar"></i> Thống kê báo cáo</h2>
+</div>
+
+<!-- Filter -->
+<div class="card reports-filter-card">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Chọn năm:</label>
+                    <select name="year" class="form-select">
+                        @foreach (var y in ViewBag.Years)
+                        {
+                            <option value="@y" selected="@(ViewBag.Year == y)">@y</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Chọn tháng:</label>
+                    <select name="month" class="form-select">
+                        @foreach (var m in ViewBag.Months)
+                        {
+                            <option value="@m" selected="@(ViewBag.Month == m)">Tháng @m</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> Lọc
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Thống kê tổng quan -->
+<div class="row stats-overview-row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-overview-card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng doanh thu
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @ViewBag.TotalRevenue.ToString("N0") ₫
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-overview-card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Tổng đơn hàng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalOrders</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-overview-card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Tổng khách hàng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalCustomers</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-overview-card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Tổng sản phẩm
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalProducts</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-box fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doanh thu tháng hiện tại -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card chart-card monthly-stats-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-calendar"></i> Thống kê tháng @ViewBag.Month/@ViewBag.Year</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center monthly-stats-center">
+                    <div class="col-6">
+                        <h6>Doanh thu</h6>
+                        <h3 class="text-success">@ViewBag.MonthlyRevenue.ToString("N0") ₫</h3>
+                    </div>
+                    <div class="col-6">
+                        <h6>Đơn hàng</h6>
+                        <h3 class="text-info">@ViewBag.MonthlyOrders</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card chart-card status-chart-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-chart-pie"></i> Trạng thái đơn hàng</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Biểu đồ doanh thu 12 tháng -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card chart-card revenue-chart-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-chart-line"></i> Doanh thu 12 tháng gần nhất</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top sản phẩm và khách hàng -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card chart-card top-products-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-fire"></i> Top 10 sản phẩm bán chạy</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Đã bán</th>
+                                <th>Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.TopProducts)
+                            {
+                                <tr>
+                                    <td>@item.ProductName</td>
+                                    <td><span class="badge bg-success">@item.TotalSold</span></td>
+                                    <td><strong>@item.Revenue.ToString("N0") ₫</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card chart-card top-customers-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-crown"></i> Top 10 khách hàng VIP</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Số ĐH</th>
+                                <th>Tổng chi tiêu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var customer in ViewBag.TopCustomers)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@customer.CustomerName</strong><br />
+                                        <small>@customer.CustomerEmail</small>
+                                    </td>
+                                    <td><span class="badge bg-info">@customer.TotalOrders</span></td>
+                                    <td><strong>@customer.TotalSpent.ToString("N0") ₫</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thống kê theo danh mục -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card chart-card category-chart-card shadow">
+            <div class="card-header text-white">
+                <h6><i class="fas fa-list"></i> Thống kê theo danh mục</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Biểu đồ doanh thu 12 tháng
+        var ctx1 = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.Last12Months)),
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: @Html.Raw(Json.Serialize(ViewBag.MonthlyRevenueData)),
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('vi-VN') + ' ₫';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ trạng thái đơn hàng
+        var ctx2 = document.getElementById('statusChart').getContext('2d');
+        var statusData = @Html.Raw(Json.Serialize(ViewBag.OrderStatusStats));
+        var statusChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: statusData.map(x => x.status),
+                datasets: [{
+                    data: statusData.map(x => x.count),
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Biểu đồ theo danh mục
+        var ctx3 = document.getElementById('categoryChart').getContext('2d');
+        var categoryData = @Html.Raw(Json.Serialize(ViewBag.CategoryStats));
+        var categoryChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: categoryData.map(x => x.categoryName),
+                datasets: [{
+                    label: 'Số lượng sản phẩm',
+                    data: categoryData.map(x => x.productCount),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Tổng đã bán',
+                    data: categoryData.map(x => x.totalSold),
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+}

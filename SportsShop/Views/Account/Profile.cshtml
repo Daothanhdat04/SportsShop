@@ -1,0 +1,123 @@
+﻿@model SportsShop.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<link rel="stylesheet" href="~/css/profile.css" />
+
+
+<div class="profile-container">
+    <div class="sidebar-wrapper">
+        <div class="account-card">
+            <div class="account-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h5>Tài khoản của tôi</h5>
+            </div>
+            <nav class="account-menu">
+                <a asp-action="Profile" class="menu-item active">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+                <a asp-action="MyOrders" class="menu-item">
+                    <i class="fas fa-box"></i>
+                    <span>Đơn hàng của tôi</span>
+                </a>
+                <a asp-action="ChangePassword" class="menu-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h4>
+                    <i class="fas fa-id-card"></i>
+                    Thông tin cá nhân
+                </h4>
+                <p class="subtitle">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+            </div>
+
+            <div class="profile-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                        <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                }
+
+                <form asp-action="Profile" method="post" class="profile-form">
+                    <div asp-validation-summary="All" class="text-danger validation-summary"></div>
+
+                    <div class="form-group">
+                        <label asp-for="FullName" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Họ và tên
+                        </label>
+                        <div class="input-wrapper">
+                            <input asp-for="FullName" class="form-input" placeholder="Nhập họ và tên của bạn" />
+                            <span asp-validation-for="FullName" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <div class="input-wrapper">
+                            <input asp-for="Email" class="form-input readonly" readonly />
+                            <small class="input-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Email không thể thay đổi
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="form-label">
+                            <i class="fas fa-phone"></i>
+                            Số điện thoại
+                        </label>
+                        <div class="input-wrapper">
+                            <input asp-for="PhoneNumber" class="form-input" placeholder="Nhập số điện thoại" />
+                            <span asp-validation-for="PhoneNumber" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Address" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Địa chỉ
+                        </label>
+                        <div class="input-wrapper">
+                            <textarea asp-for="Address" class="form-textarea" rows="3" placeholder="Nhập địa chỉ của bạn"></textarea>
+                            <span asp-validation-for="Address" class="error-message"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i>
+                            Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-BxL2yxgGpWyfP0+uQew1sbVvG1JZBqxeiNpmDqg5E1F+N7FYU4g7zIMStLk7PcNEzWYoF5v9kknwqAQYp+l1Tw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-store"></i> Admin Panel</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index">
+                        <i class="fas fa-box"></i> Quản lý sản phẩm
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Categories" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                        <i class="fas fa-list"></i> Quản lý danh mục
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Orders" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index">
+                        <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Users" asp-action="Index">
+                        <i class="fas fa-users"></i> Quản lý người dùng
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")">
+                    <a asp-area="Admin" asp-controller="Reports" asp-action="Index">
+                        <i class="fas fa-chart-bar"></i> Thống kê báo cáo
+                    </a>
+                </li>
+          
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+
+                    <div class="ms-auto d-flex align-items-center">
+                        <span class="me-3">
+                            <i class="fas fa-user-circle"></i> @User.Identity.Name
+                        </span>
+                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="container-fluid mt-4">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#content').toggleClass('active');
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

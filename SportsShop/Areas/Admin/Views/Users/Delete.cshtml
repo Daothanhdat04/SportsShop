@@ -1,0 +1,44 @@
+﻿@model SportsShop.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Xóa người dùng";
+}
+
+<h2 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Xóa người dùng</h2>
+<hr />
+
+<div class="alert alert-danger">
+    <h4>Bạn có chắc chắn muốn xóa người dùng này?</h4>
+    <p>Hành động này không thể hoàn tác!</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Họ tên:</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Số điện thoại:</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">Vai trò:</dt>
+            <dd class="col-sm-9">
+                @foreach (var role in ViewBag.Roles)
+                {
+                    <span class="badge bg-primary">@role</span>
+                }
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Xác nhận xóa
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+</div>
